@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+    
+{% block username %}
+{% endblock %}
+
+{% block content %}
+    
+    <div class="col-md-6 mt-2 mb-2 border border-secondary rounded" style="margin: 0 auto;">
+        <h1 class="mt-4" style="font-family: Geneva;">Вход в систему</h1>
+        <form id="add_form" method="post">
+            {% csrf_token %}
+            {{form}}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-secondary mt-4 mb-4 mr-2" href="{% url "index_url" %}">На главную</a>
+                <button form="add_form" type="submit" class="btn btn-primary mt-4 mb-4 mr-2">Войти</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

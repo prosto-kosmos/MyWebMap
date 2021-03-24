@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+    
+{% block username %}
+{% endblock %}
+
+{% block content %}
+    
+    <div class="col-md-6 mt-2 mb-2 border border-secondary rounded" style="margin: 0 auto;">
+        <h1 class="mt-4" style="font-family: Geneva;">Регистрация</h1>
+        <form id="add_form" method="post">
+            {% csrf_token %}
+            {{form}}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-secondary mt-4 mb-4 mr-2" href="{% url "index_url" %}">На главную</a>
+                <button form="add_form" type="submit" class="btn btn-primary mt-4 mb-4 mr-2">Зарегистрироваться</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% comment %}
+<script>
+    $(window).load(function() {
+        if (!$("#RegModal").hasClass("in")) {
+            $("#RegModal").modal('show');
+        }
+    });
+</script>
+
+ <button data-target="#RegModal" role="button" class="btn btn-primary {% if url_register_page == request.path %}active{% endif %}" data-toggle="modal">Регистрация</button> 
+
+<!-- Modal -->
+<div class="modal fade" id="RegModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Регистрация</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+        <form id="add_form" method="post">
+            {% csrf_token %}
+            {{form}}
+        </form>
+        </div>
+        <div class="modal-footer">
+            <button form="add_form" type="submit" class="btn btn-success">Зарегистрироваться</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        </div>
+    </div> 
+</div>
+</div> {% endcomment %}
