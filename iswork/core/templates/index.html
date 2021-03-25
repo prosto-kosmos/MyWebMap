@@ -7,40 +7,59 @@
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% block css %}
+        {% endblock %}
         <title>Hello, world!</title>
     </head>
     <body> 
     <!-- Button trigger modal -->
-        <div class="container mt-4">
-            <ul class="nav justify-content-end">    
-                {% if request.user.is_authenticated %}
-                    <li class="nav-item">
-                        {% url 'logout_page' as url_logout_page %}
-                        <a class="nav-link btn-danger ml-5" href="{{url_logout_page}}">Выход</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        {% url 'login_page' as url_login_page %}
-                        <a class="nav-link btn-primary mr-1{% if url_login_page == request.path %}active{% endif %}" href="{{url_login_page}}">Вход</a>
-                    </li>
-                    <li class="nav-item">
-                        {% url 'register_page' as url_register_page %}
-                        <a class="nav-link btn-primary ml-1{% if url_register_page == request.path %}active{% endif %}" href="{{url_register_page}}">Регистрация</a>
-                        {% comment %} <button data-target="#RegModal" role="button" class="btn btn-primary {% if url_register_page == request.path %}active{% endif %}" data-toggle="modal">Регистрация</button> {% endcomment %}
-                    </li>
-                {% endif %}
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-md">
+                <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                    <ul class="navbar-nav mr-auto">
+                        {% block top_nav_buttons_left %}
+                        {% endblock %}  
+                    </ul>
+                </div>
+                <div class="mx-auto order-0">
+                    <ul class="navbar-brand mx-auto mt-1">
+                        {% block nav_title %}
+                            {% if request.user.is_authenticated %}
+                                Добро пожаловать, {{request.user}}! 
+                            {% else %}
+                                Добро пожаловать!
+                            {% endif %}
+                        {% endblock %}
+                    </ul>
+                </div>
+                <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                    <ul class="navbar-nav ml-auto">
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item">
+                                {% url 'map_page' as url_map_page %}
+                                <a class="nav-link btn-success mr-1 ml-1" href="{{url_map_page}}">Карта</a>
+                            </li>
+                            <li class="nav-item">
+                                {% url 'logout_page' as url_logout_page %}
+                                <a class="nav-link btn-danger ml-1" href="{{url_logout_page}}">Выход</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                {% url 'login_page' as url_login_page %}
+                                <a class="nav-link btn-primary mr-1{% if url_login_page == request.path %}active{% endif %}" href="{{url_login_page}}">Вход</a>
+                            </li>
+                            <li class="nav-item">
+                                {% url 'register_page' as url_register_page %}
+                                <a class="nav-link btn-primary ml-1{% if url_register_page == request.path %}active{% endif %}" href="{{url_register_page}}">Регистрация</a>
+                                {% comment %} <button data-target="#RegModal" role="button" class="btn btn-primary {% if url_register_page == request.path %}active{% endif %}" data-toggle="modal">Регистрация</button> {% endcomment %}
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>   
                 
-                
-            </ul>
-            <ul class="nav">
-                {% block username %}
-                    {% if request.user.is_authenticated %}
-                        Добро пожаловать, {{request.user}}! 
-                    {% else %}
-                        Добро пожаловать!
-                    {% endif %}
-                {% endblock %}
-            </ul>
+            
+            
             {% block content %}
                 {% if request.user.is_authenticated %}
                     <h1 class="mt-4">Этот текст виден авторизованным пользователям</h1>

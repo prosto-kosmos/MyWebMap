@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+    
+{% block nav_title %}
+    Карта
+{% endblock %}
+
+{% block top_nav_buttons_left %}
+    <li class="nav-item">
+        {% url 'index_url' as index_page_url %}
+        <a class="nav-link btn-secondary" href="{{index_page_url}}">На главную</a>
+    </li>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+{% endblock %}
+
+
+{% block content %}
+    <div id="map" class="map" style="height: 600px; width: 100%;"></div>
+    <script type="text/javascript">
+	    var map = new ol.Map({
+			target: 'map',
+			layers: [
+			  new ol.layer.Tile({
+				source: new ol.source.OSM()
+			  })
+			],
+			view: new ol.View({
+			  center: ol.proj.fromLonLat([0, 0]),
+			  zoom: 1
+			})
+	    });
+		
+		map.getView().setCenter([4016594.740906363,6977780.708997443]);
+		map.getView().setZoom(11.0);
+    </script>
+{% endblock %}
