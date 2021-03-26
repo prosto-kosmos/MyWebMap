@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from .forms import AuthUserForm, RegisterUserForm
 from .models import Data
+from django.http import HttpResponse
 from django.views.generic import CreateView, TemplateView, View
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
@@ -45,8 +46,11 @@ class MapView(LoginRequiredMixin, View):
 
     def get(self, request):
         user_data = Data.objects.filter(user = request.user)
+        # проверка на отсутствие данных пользователя в БД и создание дефолтных
         if len(user_data)==0:
-            pass
+            d = Data(user = request.user)
+            d.save()
+            user_data = Data.objects.filter(user = request.user)
         user_data = user_data[0]
         zoom, e, n = user_data.zoom, user_data.position_e, user_data.position_n
         context = {
@@ -56,3 +60,22 @@ class MapView(LoginRequiredMixin, View):
         }
         template = 'map_page.html'
         return render(request,template,context)
+
+class SaveUserDataView(View):
+    def post(self, request):
+        zoom = request.POST.get('zoom')
+        position_e = request.POST.get('position_e')
+        position_n = request.POST.get('position_n')
+
+        user_data = Data.objects.filter(user = request.user)
+        if len(user_data)==0:
+            d = Data(user = request.user)
+            d.save()
+            user_data = Data.objects.filter(user = request.user)
+        user_data = user_data[0]
+        user_data.zoom = zoom
+        user_data.position_e = position_e
+        user_data.position_n = position_n
+        user_data.save()
+    
+        return HttpResponse(True)

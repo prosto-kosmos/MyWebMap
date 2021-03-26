@@ -1,5 +1,5 @@
 {% extends 'index.html' %}
-    
+{% load static %}
 {% block nav_title %}
     Карта
 {% endblock %}
@@ -12,14 +12,20 @@
 {% endblock %}
 
 {% block css %}
+	<!--   jQuery и OpenLayers можно скачать на официальных сайтах и использовать оффлайн -->
+	<!-- 		  jQuery      - https://jquery.com/download/ -->
+	<!-- 		OpenLayers    - https://openlayers.org/download/ -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
 {% endblock %}
 
+{% csrf_token %}
 
 {% block content %}
-    <div id="map" class="map" style="height: 600px; width: 100%;"></div>
+    <div id="map" class="map" style="height: 600px; width: 100%;}"></div>
     <script type="text/javascript">
+		
 	    var map = new ol.Map({
 			target: 'map',
 			layers: [
@@ -32,8 +38,30 @@
 			  zoom: 1
 			})
 	    });
-		
-		map.getView().setCenter([4016594.740906363,6977780.708997443]);
-		map.getView().setZoom(11.0);
+		position_e = parseFloat('{{position_e}}'.replace(",", "."))
+		position_n = parseFloat('{{position_n}}'.replace(",", "."))
+		zoom = parseFloat('{{zoom}}'.replace(",", "."))
+
+		var view = map.getView();
+		view.setCenter([position_e, position_n]);
+		view.setZoom(zoom);
+
+		map.on('moveend', function () {
+			$.ajax({
+				url: '{% url "userdata_save" %}',
+				method: 'post',
+				dataType:'json',
+				data: {
+					zoom: view.getZoom(),
+					position_e: view.getCenter()[0],
+					position_n: view.getCenter()[1],
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+				},     
+				success: function(data){ 
+					console.log(data);
+				}
+			});
+		});
+
     </script>
 {% endblock %}
