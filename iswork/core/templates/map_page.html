@@ -23,14 +23,17 @@
 {% csrf_token %}
 
 {% block content %}
-    <div id="map" class="map" style="height: 600px; width: 100%;}"></div>
+    <div id="map" class="map" style="height: 90vh; width: 100%;}"></div>
     <script type="text/javascript">
 		
 	    var map = new ol.Map({
+			controls: ol.control.defaults().extend([new ol.control.FullScreen()]),
 			target: 'map',
 			layers: [
 			  new ol.layer.Tile({
-				source: new ol.source.OSM()
+				source: new ol.source.OSM({
+					attributions: "",
+				})
 			  })
 			],
 			view: new ol.View({
