@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from .forms import AuthUserForm, RegisterUserForm
 from .models import Data
+from .data import getStartObjests
 from django.http import HttpResponse
 from django.views.generic import CreateView, TemplateView, View
 from django.urls import reverse, reverse_lazy
@@ -57,6 +58,7 @@ class MapView(LoginRequiredMixin, View):
             'zoom': zoom,
             'position_e': e,
             'position_n': n,
+            'objects': getStartObjests(),
         }
         template = 'map_page.html'
         return render(request,template,context)

@@ -18,36 +18,194 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+	<script src="https://unpkg.com/elm-pep"></script>
+	<style>
+		.fullscreen:-webkit-full-screen {
+			height: 100%;
+			margin: 0;
+		}
+		.fullscreen:-ms-fullscreen {
+			height: 100%;
+		}
+
+		.fullscreen:fullscreen {
+			height: 100%;
+		}
+
+		.fullscreen {
+			width: 100%;
+			height: 90vh;
+		}
+
+		.map .ol-rotate {
+			top: 3em;
+		}
+
+		.map {
+			width:80%;
+			height: 100%;
+			float: left;
+		}
+
+		.sidepanel {
+			background: #f8f9fa;
+			width: 20%;
+			height: 100%;
+			float: left;
+		}
+
+		.sidepanel-title {
+			width: 100%;
+			font-size: 3em;
+			color: #ffffff;
+			display: block;
+			text-align: center;
+		}
+
+		.popover-body {
+			min-width: 276px;
+		}
+    </style>
 {% endblock %}
 
 {% csrf_token %}
 
 {% block content %}
-    <div id="map" class="map" style="height: 90vh; width: 100%;}"></div>
+	<div id="fullscreen" class="fullscreen">
+    	<div id="map" class="map"></div>
+		<div style="display: none;">
+			<div id="popup" title="Автомобиль"></div>
+		</div>
+		<div class="sidepanel">
+			<div class="list-group" style="height:100%">
+				<div id="objectslist" style="height:100%;" class="overflow-auto p-1">
+					{% for auto_id, value in objects.items %}
+						<button href="#" id="{{auto_id}}"class="list-group-item list-group-item-action">
+							<div class="d-flex w-100 justify-content-between">
+								<h5 class="mb-1">{{value.model}}</h5>
+								<small class="text-muted">{{value.enabled}}</small>
+							</div>
+							<p class="mb-1">Номер - <i>{{value.number}}</i></p>
+							<small class="text-muted">E:{{value.position_e}} N:{{value.position_n}}</small>
+						</button>
+					{% endfor %}
+				</div>
+            </div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalTitle" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="detailsModalTitle">Автомобиль</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p id="detailsModalText"></p>
+				<img id="detailsModalImage" src={% static "videostream.png" %} width=100%>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+			</div>
+			</div>
+		</div>
+		</div>
+    </div>
+
+	
+
     <script type="text/javascript">
+		var iconStyle = new ol.style.Style({
+			image: new ol.style.Icon({
+				anchor: [0.5, 46],
+				anchorXUnits: 'fraction',
+				anchorYUnits: 'pixels',
+				src: '{% static "icon.png" %}',
+			}),
+		});
+
+		position_e = parseFloat('{{position_e}}'.replace(",", "."));
+		position_n = parseFloat('{{position_n}}'.replace(",", "."));
+		zoom = parseFloat('{{zoom}}'.replace(",", "."));
 		
+		{% autoescape off %}
+		{% endautoescape %}
+
+		const objsMap = new Map();
+
+		{% for auto_id, value in objects.items %}
+			(function(objsMap){
+				let objectMap = new Map();
+				objectMap.set('enabled','{{value.enabled}}');
+				objectMap.set('number','{{value.number}}');
+				objectMap.set('model','{{value.model}}');
+				objectMap.set('stream_link','{{value.stream_link}}');
+				objectMap.set('position_n','{{value.position_n}}');
+				objectMap.set('position_e','{{value.position_e}}');
+				objsMap.set('{{auto_id}}', objectMap);
+			})(objsMap);
+		{% endfor %}
+		
+		var iconFeatureList = [];
+		for(var [auto_id, value] of objsMap.entries()) {
+			var iconFeature = new ol.Feature({
+				geometry: new ol.geom.Point([value.get('position_e'), value.get('position_n')]),
+				name: auto_id,
+				population: 4000,
+				rainfall: 500,
+			});
+			iconFeature.setStyle(iconStyle);
+			iconFeatureList.push(iconFeature);
+		}
+	
+		var vectorSource = new ol.source.Vector({
+			features: iconFeatureList,
+		});
+
+		var vectorLayer = new ol.layer.Vector({
+			source: vectorSource,
+		});
+
 	    var map = new ol.Map({
-			controls: ol.control.defaults().extend([new ol.control.FullScreen()]),
+			controls: ol.control.defaults().extend([
+				new ol.control.FullScreen({
+					source: 'fullscreen',
+				})
+			]),
 			target: 'map',
 			layers: [
 			  new ol.layer.Tile({
 				source: new ol.source.OSM({
 					attributions: "",
 				})
-			  })
+			  }), 
+			  vectorLayer,
 			],
 			view: new ol.View({
 			  center: ol.proj.fromLonLat([0, 0]),
 			  zoom: 1
 			})
 	    });
-		position_e = parseFloat('{{position_e}}'.replace(",", "."))
-		position_n = parseFloat('{{position_n}}'.replace(",", "."))
-		zoom = parseFloat('{{zoom}}'.replace(",", "."))
-
+		
 		var view = map.getView();
 		view.setCenter([position_e, position_n]);
 		view.setZoom(zoom);
+
+		const iconMap = new Map();
+		for(var i = 0; i < iconFeatureList.length; i++){
+			iconMap.set(iconFeatureList[i].get('name'), iconFeatureList[i]);
+		}
+
+		setInterval(function(){
+			for(var i = 1; i < 9; i++){
+				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
+				let px = parseFloat(p[0])+50.0;
+				let py = parseFloat(p[1])+50.0;
+				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
+			}
+		},50); 
 
 		map.on('moveend', function () {
 			$.ajax({
@@ -66,5 +224,118 @@
 			});
 		});
 
+		var element = document.getElementById('popup');
+
+		var popup = new ol.Overlay({
+			element: element,
+			positioning: 'bottom-center',
+			stopEvent: false,
+			offset: [0, -50],
+		});
+		map.addOverlay(popup);
+
+		map.on('pointermove', function (evt) {
+			$(element).popover('dispose');
+			var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+				return feature;
+			});
+			if (feature) {
+				var coordinates = feature.getGeometry().getCoordinates();
+				var hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(coordinates));
+				popup.setPosition(coordinates);
+				document.getElementById('popup').setAttribute('title', `${objsMap.get(feature.get('name')).get('model')}`);
+				$(element).popover({
+					container: element,
+					placement: 'top',
+					animation: false,
+					html: true,
+					content: `<p>Номер: <i>${objsMap.get(feature.get('name')).get('number')}</i></p> \ 
+							<img src={% static "videostream.png" %} width=250px);> \
+							<code>${hdms}</code>` ,
+				});
+				$(element).popover('show');
+			} else {
+				$(element).popover('dispose');
+			}
+		});
+		// change mouse cursor when over marker
+		map.on('pointermove', function (evt) {
+			var hit = this.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+				return true;
+			}); 
+			if (hit) {
+				this.getTargetElement().style.cursor = 'pointer';
+			} else {
+				this.getTargetElement().style.cursor = '';
+			}
+		});
+
+		map.on('click', function (evt) {
+			var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+				return feature;
+			});
+			if (feature) {
+				var detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'), {
+					keyboard: false
+				});
+				document.getElementById('detailsModalTitle').innerHTML = objsMap.get(feature.get('name')).get('model');
+				document.getElementById('detailsModalText').innerHTML = `Номер: <i>${objsMap.get(feature.get('name')).get('number')}</i>`;
+				detailsModal.show();
+				$(element).popover('dispose');
+			} else {
+				$(element).popover('dispose');
+			}
+		});
+
+		var tileLayer = new ol.layer.Tile({
+			source: new ol.source.OSM({
+				wrapX: false,
+			}),
+		});
+		var duration = 1000;
+		function flash(feature) {
+			var start = new Date().getTime();
+			var listenerKey = vectorLayer.on('postrender', animate);
+			function animate(event) {
+				var vectorContext = ol.render.getVectorContext(event);
+				var frameState = event.frameState;
+				var flashGeom = feature;
+				var elapsed = frameState.time - start;
+				var elapsedRatio = elapsed / duration;
+				// radius will be 5 at start and 30 at end.
+				var radius = ol.easing.easeOut(elapsedRatio) * 20 + 5;
+				var opacity = ol.easing.easeOut(1 - elapsedRatio);
+
+				var style = new ol.style.Style({
+				image: new ol.style.Circle({
+					radius: radius,
+					stroke: new ol.style.Stroke({
+					color: 'rgba(255, 0, 0, ' + opacity + ')',
+					width: 0.25 + opacity,
+					}),
+				}),
+				});
+
+				vectorContext.setStyle(style);
+				vectorContext.drawGeometry(flashGeom);
+				if (elapsed > duration) {
+				ol.Observable.unByKey(listenerKey);
+				return;
+				}
+				// tell OpenLayers to continue postrender animation
+				map.render();
+			}
+		}
+		
+
+		var test_items = document.querySelectorAll(".list-group-item");
+		for (var i = 0; i < test_items.length; i++) {
+			test_items[i].addEventListener("click", function () {
+				var car_id = this.getAttribute('id');
+				let p =  iconMap.get(car_id).get('geometry').getFirstCoordinate();
+				view.setCenter([parseFloat(p[0]), parseFloat(p[1])]);
+				flash(iconMap.get(car_id).get('geometry'));
+			}, false);
+		}
     </script>
 {% endblock %}
