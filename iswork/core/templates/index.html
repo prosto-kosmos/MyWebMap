@@ -7,55 +7,59 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <style>
+            #top-line{
+                border:solid 1px #ccc;
+            }
+        </style>
         {% block css %}
         {% endblock %}
         <title>Hello, world!</title>
     </head>
     <body> 
     <!-- Button trigger modal -->
-        <div class="container-fluid">
-            <nav class="navbar navbar-expand bg-light">
-                <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-                    <ul class="navbar-nav mr-auto">
+        <div class="container-fluid px-3">
+            <nav id="top-line" class="navbar navbar-expand bg-light">
+                <div class="col-4">
+                    <div class="navbar-nav justify-content-start">
                         {% block top_nav_buttons_left %}
                         {% endblock %}  
-                    </ul>
+                    </div>
                 </div>
-                <div class="mx-auto order-2">
-                    <ul class="navbar-brand mx-auto mt-1">
+                <div class="col-4">
+                    <div class="navbar-brand justify-content-center">
                         {% block nav_title %}
                             {% if request.user.is_authenticated %}
-                                Добро пожаловать, {{request.user}}! 
+                                <h4 align="center">Добро пожаловать, {{request.user}}! </h4>
                             {% else %}
-                                Добро пожаловать!
+                                <h4 align="center">Добро пожаловать! </h4>
                             {% endif %}
                         {% endblock %}
-                    </ul>
+                    </div>
                 </div>
-                <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-                    <ul class="navbar-nav ml-auto">
+                <div class="col-4">
+                    <div class="navbar-nav justify-content-end">
                         {% if request.user.is_authenticated %}
-                            <li class="nav-item">
+                            <div class="nav-item">
                                 {% url 'map_page' as url_map_page %}
-                                <a class="nav-link btn-success mr-1 ml-1" href="{{url_map_page}}">Карта</a>
-                            </li>
-                            <li class="nav-item">
+                                <a class="nav-link btn-success mx-1" href="{{url_map_page}}">Карта</a>
+                            </div>
+                            <div class="nav-item">
                                 {% url 'logout_page' as url_logout_page %}
-                                <a class="nav-link btn-danger ml-1" href="{{url_logout_page}}">Выход</a>
-                            </li>
+                                <a class="nav-link btn-danger mx-2" href="{{url_logout_page}}">Выход</a>
+                            </div>
                         {% else %}
-                            <li class="nav-item">
+                            <div class="nav-item">
                                 {% url 'login_page' as url_login_page %}
-                                <a class="nav-link btn-primary mr-1{% if url_login_page == request.path %}active{% endif %}" href="{{url_login_page}}">Вход</a>
-                            </li>
-                            <li class="nav-item">
+                                <a class="nav-link btn-primary mx-1" href="{{url_login_page}}">Вход</a>
+                            </div>
+                            <div class="nav-item">
                                 {% url 'register_page' as url_register_page %}
-                                <a class="nav-link btn-primary ml-1{% if url_register_page == request.path %}active{% endif %}" href="{{url_register_page}}">Регистрация</a>
-                                {% comment %} <button data-target="#RegModal" role="button" class="btn btn-primary {% if url_register_page == request.path %}active{% endif %}" data-toggle="modal">Регистрация</button> {% endcomment %}
-                            </li>
+                                <a class="nav-link btn-primary mx-2" href="{{url_register_page}}">Регистрация</a>
+                            </div>
                         {% endif %}
-                    </ul>
+                    </div>
                 </div>
             </nav>   
                 
@@ -74,8 +78,7 @@
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
         
         {% block js %}
         {% endblock %}

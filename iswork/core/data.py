@@ -74,5 +74,50 @@ def getStartObjests():
             'position_n':'6957810.398997443',
             'position_e':'4046659.540906363',
         },
+        'auto9':
+        {
+            'enabled':'True',
+            'number':'o545ko55',
+            'model':'Mitsubishi Lancer',
+            'stream_link':'https://localhost:8000',
+            'position_n':'6958670.398997443',
+            'position_e':'4048659.540906363',
+        },
+        'auto10':
+        {
+            'enabled':'True',
+            'number':'k919ao57',
+            'model':'Ford Focus',
+            'stream_link':'https://localhost:8000',
+            'position_n':'6957810.398997443',
+            'position_e':'4040659.540906363',
+        },
+        'auto11':
+        {
+            'enabled':'True',
+            'number':'c654pc57',
+            'model':'Cadillac Escalade',
+            'stream_link':'https://localhost:8000',
+            'position_n':'6943810.398997443',
+            'position_e':'4043659.540906363',
+        },
+        'auto12':
+        {
+            'enabled':'False',
+            'number':'p112pc57',
+            'model':'Jeep Compass',
+            'stream_link':'https://localhost:8000',
+            'position_n':'6945810.398997443',
+            'position_e':'4053987.540906363',
+        },
+        'auto13':
+        {
+            'enabled':'False',
+            'number':'o056cp777',
+            'model':' Hummer EV',
+            'stream_link':'https://localhost:8000',
+            'position_n':'6950810.398997443',
+            'position_e':'4036659.540906363',
+        },
     }
     return objs
