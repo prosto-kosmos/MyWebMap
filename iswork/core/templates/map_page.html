@@ -43,14 +43,14 @@
 		}
 
 		.map {
-			width:80%;
+			width:auto;
 			height: 100%;
-			float: left;
+			margin-left:300px;
 		}
 
 		.sidepanel {
 			background: #eee;
-			width: 20%;
+			width: 300px;
 			height: 100%;
 			float: left;
 			border:solid 1px #ccc;
@@ -84,6 +84,14 @@
 			margin-top:5px;
 			margin-bottom:15px;
 		}
+
+		.rotate-north {
+			top: 85px;
+			left: .5em;
+		}
+		.ol-touch .rotate-north {
+			top: 80px;
+		}
     </style>
 {% endblock %}
 
@@ -91,12 +99,12 @@
 
 {% block content %}
 	<div id="fullscreen" class="fullscreen">
-    	<div id="map" class="map"></div>
+    	
 		<div style="display: none;">
 			<div id="popup" title="Автомобиль"></div>
 		</div>
 		
-		<div class="sidepanel">
+		<div class="sidepanel" id="sidepanel">
 			<div id="objectslist" class="list-group" style="height:100%">
 				<div style="height:100%;" class="overflow-auto p-1">
 					<ul class="list">
@@ -107,7 +115,7 @@
 									<small class="text-muted">
 										{% comment %} {{value.enabled}} {% endcomment %}
 										<div class="form-check form-switch">
-											<span id="{{auto_id}}" class="badge bg-primary">View</span>
+											<span id="{{auto_id}}" class="badge bg-primary">Show</span>
 											<input id="{{auto_id}}" class="form-check-input view-object" type="checkbox" checked>
 										</div>
 									</small>
@@ -121,6 +129,7 @@
 				<input class="search" placeholder="Поиск" />
             </div>
 		</div>
+		<div id="map" class="map"></div>
 		<!-- Modal -->
 		<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalTitle" aria-hidden="true">
 		<div class="modal-dialog">
@@ -202,11 +211,53 @@
 			source: vectorSource,
 		});
 
+		var RotateNorthControl = /*@__PURE__*/(function (Control) {
+			
+			function RotateNorthControl(opt_options) {
+				var options = opt_options || {};
+				
+    
+				var button = document.createElement('button');
+				button.innerHTML = '«'; // Alt + 0171 и Alt + 0187. 
+
+				var element = document.createElement('div');
+				element.className = 'rotate-north ol-unselectable ol-control';
+				element.appendChild(button);
+
+				ol.control.Control.call(this, {
+					element: element,
+					target: options.target,
+				});
+					
+				button.addEventListener('click', function(){
+					if (this.innerHTML == '«'){
+						document.getElementById('map').style.marginLeft = "0px";
+						document.getElementById('sidepanel').hidden = true;
+						map.updateSize();
+						this.innerHTML = '»';
+					} 
+					else {
+						document.getElementById('map').style.marginLeft = "300px";
+						document.getElementById('sidepanel').hidden = false;
+						map.updateSize();
+						this.innerHTML = '«';
+					}
+				}, false);
+			}
+
+			if ( Control ) RotateNorthControl.__proto__ = ol.control.Control;
+			RotateNorthControl.prototype = Object.create( ol.control.Control && ol.control.Control.prototype );
+			RotateNorthControl.prototype.constructor = RotateNorthControl;
+
+			return RotateNorthControl;
+		}(ol.control.Control));
+
 	    var map = new ol.Map({
 			controls: ol.control.defaults().extend([
 				new ol.control.FullScreen({
 					source: 'fullscreen',
-				})
+				}),
+				new RotateNorthControl(),
 			]),
 			target: 'map',
 			layers: [
@@ -416,5 +467,6 @@
 				view_switch[i].click();
 			}*/
 		}
+
     </script>
 {% endblock %}
