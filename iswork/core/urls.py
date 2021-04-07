@@ -9,4 +9,5 @@ urlpatterns = [
     path('logout', views.MyProjectLogout.as_view(), name='logout_page'),
     path('map', views.MapView.as_view(), name='map_page'),
     path('userdata_save_ajax/', views.SaveUserDataView.as_view(), name='userdata_save'),
+    path('get_coor_ajax/', views.GetCoorView.as_view(), name='get_coor'),
 ]

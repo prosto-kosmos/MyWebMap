@@ -74,13 +74,12 @@
 			padding:5px;
 			box-shadow: inset 0 0px 0 #fff;
 		}
-
+		
 		.search {
 			border:solid 1px #ccc;
 			border-radius: 5px;
 			padding:7px 14px;
-			margin-left:10px;
-			margin-right:15px;
+			
 			margin-top:5px;
 			margin-bottom:15px;
 		}
@@ -91,6 +90,14 @@
 		}
 		.ol-touch .rotate-north {
 			top: 80px;
+		}
+
+		.form-switch.form-switch-lg .form-check-input {
+			height: 2rem;
+			width: 4rem;
+			border-radius: 5rem;
+			margin-bottom:15px;
+			margin-left: -25px;
 		}
     </style>
 {% endblock %}
@@ -115,7 +122,7 @@
 									<small class="text-muted">
 										{% comment %} {{value.enabled}} {% endcomment %}
 										<div class="form-check form-switch">
-											<span id="{{auto_id}}" class="badge bg-primary">Show</span>
+											<span id="{{auto_id}}" class="badge bg-primary show">Show</span>
 											<input id="{{auto_id}}" class="form-check-input view-object" type="checkbox" checked>
 										</div>
 									</small>
@@ -126,7 +133,18 @@
 						{% endfor %}
 					</ul>
 				</div>
-				<input class="search" placeholder="Поиск" />
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-8">
+							<input class="search" placeholder="Поиск"/>
+						</div>
+						<div class="col-4">
+							<div class="form-check form-switch form-switch-lg">
+								<input id="all_auto" class="form-check-input" type="checkbox" checked>
+							</div>
+						</div>
+					</div>
+				</div>
             </div>
 		</div>
 		<div id="map" class="map"></div>
@@ -283,33 +301,6 @@
 			iconMap.set(iconFeatureList[i].get('name'), iconFeatureList[i]);
 		}
 
-		setInterval(function(){
-			for(var i = 1; i < 4; i++){
-				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
-				let px = parseFloat(p[0])+50.0;
-				let py = parseFloat(p[1])+30.0;
-				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
-			}
-			for(var i = 4; i < 7; i++){
-				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
-				let px = parseFloat(p[0])+60.0;
-				let py = parseFloat(p[1])-60.0;
-				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
-			}
-			for(var i = 7; i < 9; i++){
-				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
-				let px = parseFloat(p[0])-20.0;
-				let py = parseFloat(p[1])-40.0;
-				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
-			}
-			for(var i = 9; i < 12; i++){
-				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
-				let px = parseFloat(p[0])-70.0;
-				let py = parseFloat(p[1])+60.0;
-				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
-			}
-		},50); 
-
 		map.on('moveend', function () {
 			$.ajax({
 				url: '{% url "userdata_save" %}',
@@ -434,10 +425,10 @@
 
 		
 
-		var view_button = document.querySelectorAll(".badge");
+		var view_button_show = document.querySelectorAll(".show");
 		var view_switch = document.querySelectorAll(".view-object");
-		for (var i = 0; i < view_button.length; i++) {
-			view_button[i].addEventListener("click", function () {
+		for (var i = 0; i < view_button_show.length; i++) {
+			view_button_show[i].addEventListener("click", function () {
 				var car_id = this.getAttribute('id');
 				let feature = iconMap.get(car_id);
 				let p = feature.get('geometry').getFirstCoordinate();
@@ -463,10 +454,61 @@
 				}
 			}, false);
 
-			/*if (objsMap.get(view_button[i].getAttribute('id')).get('enabled') == 'False'){
+			/*if (objsMap.get(view_button_show[i].getAttribute('id')).get('enabled') == 'False'){
 				view_switch[i].click();
 			}*/
 		}
 
+		var view_switch_all = document.getElementById("all_auto");
+		view_switch_all.addEventListener("change", function () {
+			for(var j = 0; j < view_button_show.length; j++){
+				if (view_switch[j].checked != this.checked){
+					view_switch[j].click();
+				}
+			}
+		}, false);
+
     </script>
+	<script>
+		setInterval(function(){
+			/*$.ajax({
+				url: '{% url "get_coor" %}',
+				method: 'post',
+				dataType:'json',
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+				},     
+				success: function(data){ 
+					for(var key in data){
+						iconMap.get(key).set('geometry', new ol.geom.Point([data[key]['position_e'], data[key]['position_n']]));
+					}
+				}
+			});*/
+			
+			for(var i = 1; i < 5; i++){
+				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
+				let px = parseFloat(p[0])+50.0;
+				let py = parseFloat(p[1])+30.0;
+				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
+			}
+			for(var i = 5; i < 9; i++){
+				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
+				let px = parseFloat(p[0])+60.0;
+				let py = parseFloat(p[1])-60.0;
+				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
+			}
+			for(var i = 9; i < 13; i++){
+				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
+				let px = parseFloat(p[0])-20.0;
+				let py = parseFloat(p[1])-40.0;
+				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
+			}
+			for(var i = 13; i < 16; i++){
+				let p =  iconMap.get(`auto${i.toString()}`).get('geometry').getFirstCoordinate();
+				let px = parseFloat(p[0])-70.0;
+				let py = parseFloat(p[1])+60.0;
+				iconMap.get(`auto${i.toString()}`).set('geometry', new ol.geom.Point([px,py]));
+			}
+		},50); 
+	</script>
 {% endblock %}

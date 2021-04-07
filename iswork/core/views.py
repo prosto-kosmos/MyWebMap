@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from .forms import AuthUserForm, RegisterUserForm
 from .models import Data
-from .data import getStartObjests
+from .data import getStartObjests, getCoordinatesObjests
 from django.http import HttpResponse
 from django.views.generic import CreateView, TemplateView, View
 from django.urls import reverse, reverse_lazy
@@ -81,3 +81,7 @@ class SaveUserDataView(View):
         user_data.save()
     
         return HttpResponse(True)
+
+class GetCoorView(View):
+    def post(self, request):    
+        return HttpResponse(getCoordinatesObjests())
