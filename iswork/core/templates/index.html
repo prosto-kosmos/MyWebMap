@@ -65,13 +65,22 @@
                 
             
             
+            
+            
             {% block content %}
+                <div style="position: fixed; height: 100%; width:100%; background: radial-gradient(#FEFFFF, #A7CECC);">
                 {% if request.user.is_authenticated %}
-                    <h1 class="mt-4">Этот текст виден авторизованным пользователям</h1>
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <p class="fs-3 fst-italic" style="text-align:center; margin-bottom:200px;">Вы вошли в систему. Начните работу с картой!</p>
+                    </div>
                 {% else %}
-                    <h1 class="mt-4">Этот текст виден всем</h1>
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <p class="fs-3 fst-italic" style="text-align:center; margin-bottom:200px;">Войдите в систему или зарегистрируйтесь</p>
+                    </div>
                 {% endif %}
+                </div>
             {% endblock %}
+            
         </div>
 
         <!-- Optional JavaScript -->

@@ -1,19 +1,27 @@
 {% extends 'index.html' %}
 
+{% block top_nav_buttons_left %}
+    <li class="nav-item px-3">
+        {% url 'index_url' as index_page_url %}
+        <a class="nav-link btn-secondary" href="{{index_page_url}}">На главную</a>
+    </li>
+{% endblock %}
+
 {% block content %}
-     
-    <div class="col-md-6 my-5 border border-secondary rounded" style="margin: 0 auto;">
-        <h1 align="center" style="font-family: Geneva; margin-top: 20px;">Вход в систему</h1>
-        <div class="mx-5">
-            <form id="add_form" method="post">
-                {% csrf_token %}
-                {{form}}
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a class="btn btn-secondary mt-4 mb-4 mr-2" href="{% url "index_url" %}">На главную</a>
-                    <button form="add_form" type="submit" class="btn btn-primary my-4 mx-2">Войти</button>
-                </div>
-            </form>
+    <div style="position: fixed; height: 100%; width:100%; background: radial-gradient(#FEFFFF, #A7CECC);"> 
+        <div class="col-md-6 my-5 border border-secondary rounded" style="margin: 0 auto; background:#ffffff;">
+            <h1 align="center" style="font-family: Geneva; margin-top: 20px;">Вход в систему</h1>
+            <div class="mx-5">
+                <form id="add_form" method="post">
+                    {% csrf_token %}
+                    {{form}}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        {% url 'register_page' as url_register_page %}
+                        <a class="btn btn-secondary mt-4 mb-4 mr-2" href="{{url_register_page}}">Регистрация</a>
+                        <button form="add_form" type="submit" class="btn btn-primary my-4 mx-2">Войти</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-
 {% endblock %}
