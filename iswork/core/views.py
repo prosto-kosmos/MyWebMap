@@ -71,21 +71,31 @@ class MapView(LoginRequiredMixin, View):
 
 class SaveUserDataView(View):
     def post(self, request):
-        zoom = request.POST.get('zoom')
-        position_e = request.POST.get('position_e')
-        position_n = request.POST.get('position_n')
-
         user_data = Data.objects.filter(user = request.user)
         if len(user_data)==0:
             d = Data(user = request.user)
             d.save()
             user_data = Data.objects.filter(user = request.user)
         user_data = user_data[0]
-        user_data.zoom = zoom
-        user_data.position_e = position_e
-        user_data.position_n = position_n
+
+        if not request.POST.get('settingsId') is None:
+            if request.POST.get('settingsId') == 'settings_size_text':
+                user_data.settings_size_text = request.POST.get('settingsValue')
+            if request.POST.get('settingsId') == 'settings_size_preview':
+                user_data.settings_size_preview = request.POST.get('settingsValue')
+            if request.POST.get('settingsId') == 'settings_opacity_windows':
+                user_data.settings_opacity_windows = request.POST.get('settingsValue')
+        
+        if not request.POST.get('zoom') is None:
+            user_data.zoom = request.POST.get('zoom')
+
+        if not request.POST.get('position_e') is None:
+            user_data.position_e = request.POST.get('position_e')
+
+        if not request.POST.get('position_n') is None:
+            user_data.position_n = request.POST.get('position_n')
+
         user_data.save()
-    
         return HttpResponse(True)
 
 class GetCoorView(View):
