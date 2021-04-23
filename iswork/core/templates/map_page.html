@@ -1,5 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
+{% load mathfilters %}
 {% block nav_title %}
     <h4 align="center">Карта </h4>
 {% endblock %}
@@ -44,7 +45,6 @@
 								<div class="d-flex w-100 justify-content-between">
 									<h5 class="mb-1 model">{{value.model}}</h5>
 									<small class="text-muted">
-										{% comment %} {{value.enabled}} {% endcomment %}
 										<div class="form-check form-switch">
 											<span id="{{auto_id}}" class="badge bg-primary show">Show</span>
 											<input id="{{auto_id}}" class="form-check-input view-object" type="checkbox" checked>
@@ -63,14 +63,21 @@
 							<input class="search" placeholder="Поиск"/>
 						</div>
 						<div class="col-4">
-							<button type="button" class="btn btn-light btn-global-settings" data-bs-toggle="modal" data-bs-target="#globalSettingsModal">⚙️</button>
+							<i class="bi bi-gear"></i>
+							<button type="button" class="btn btn-outline-secondary btn-global-settings" data-bs-toggle="modal" data-bs-target="#globalSettingsModal">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+									<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+									<path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+								</svg>
+								<span class="visually-hidden">Button</span>
+							</button>
 						</div>
 					</div>
 				</div>
             </div>
 		</div>
 		<div id="map" class="map"></div>
-
+		
 		<!-- Video Modal -->
 		<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
@@ -118,17 +125,52 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<div id="globalSettingsModalContent">
-						<div class="form-check form-switch form-switch-lg">
-							<div>
-								<div> Показать/скрыть  </div>
-								<div>
-								<input id="all_show" class="form-check-input" type="checkbox" checked>
-								</div>
+					<div id="globalSettingsModalContent" class="container">
+						<div class="row gsettings-row">
+							<div class="col-4">
+								<label for="customRange1" class="form-label">Масштаб текста списка датчиков</label>
 							</div>
-							<div>
-								<label for="customRange3" class="form-label">Example range</label>
-								<input type="range" class="form-range" min="0" max="5" step="0.5" id="customRange3">
+							<div class="col gsettings-col">
+								<input type="range" class="form-control-range gsettings-range" min="9" max="20" step="1.0" value="{{settings_size_text}}" id="customRange1" oninput="dragRange1()">
+							</div>
+							<div class="col-2 gsettings-col">
+								<p id="contentRange1" class="gsettings-val">{{settings_size_text}}px</p>
+							</div>
+						</div>
+						<div class="row gsettings-row">
+							<div class="col-4">
+								<label for="customRange2" class="form-label">Масштаб превью видеопотока</label>
+							</div>
+							<div class="col gsettings-col">
+								<input type="range" class="form-control-range gsettings-range" min="150" max="500" step="10.0" value="{{settings_size_preview}}" id="customRange2" oninput="dragRange2()">
+							</div>
+							<div class="col-2 gsettings-col">
+								<p id="contentRange2" class="gsettings-val">{{settings_size_preview}}px</p>
+							</div>							
+						</div>
+						<div class="row gsettings-row">
+							<div class="col-4">
+								<label for="customRange3" class="form-label">Прозрачность окон указателей</label>
+							</div>
+							<div class="col gsettings-col">
+								<input type="range" class="form-control-range gsettings-range" min="0.3" max="1.0" step="0.1" value="0.9" id="customRange3" oninput="dragRange3()">
+							</div>
+							<div class="col-2 gsettings-col">
+								<script>alert('{{settings_opacity_windows|floatformat}}');</script>
+								<p id="contentRange3" class="gsettings-val">{{settings_opacity_windows|mul:100|add:0}}%</p>
+								<script>
+									parseFloat('{{settings_opacity_windows}}')+1;
+								</script>
+							</div>							
+						</div>
+						<div class="row">
+							<div class="col">
+								<label for="all_show" class="form-label">Показать (скрыть) все указатели</label>
+							</div>
+							<div class="col-2 gsettings-col">
+								<div class="form-check form-switch">
+									<input id="all_show" class="form-check-input" type="checkbox" checked>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -432,6 +474,13 @@
 							</div>`
 						);
 
+						var rng1 = document.getElementById('customRange1');
+						var rng2 = document.getElementById('customRange2');
+						var rng3 = document.getElementById('customRange3');
+						$('.params-lines').css({'font-size': rng1.value +'px'});
+						$('.carousel-inner').css({'width': rng2.value +'px'});
+						$('.popover').css({'opacity': rng3.value});
+
 						$(element).find('#cancel_popup').on('click', function(e) {
 							$(element).popover('dispose');
 						});
@@ -585,7 +634,7 @@
 		}
 
 		// Обработка события показа/скрытия всех указателей entity
-		var view_switch_all = document.getElementById("all_auto");
+		var view_switch_all = document.getElementById("all_show");
 		view_switch_all.addEventListener("change", function () {
 			for(var j = 0; j < view_button_show.length; j++){
 				if (view_switch[j].checked != this.checked){
@@ -593,6 +642,23 @@
 				}
 			}
 		}, false);
+
+		// Обработка ползунков настроек
+		function dragRange1(){
+			var rng = document.getElementById('customRange1');
+			$('#contentRange1').html(rng.value +'px');
+			$('.params-lines').css({'font-size': rng.value +'px'});
+		}
+		function dragRange2(){
+			var rng = document.getElementById('customRange2');
+			$('#contentRange2').html(rng.value +'px');
+			$('.carousel-inner').css({'width': rng.value +'px'});
+		}
+		function dragRange3(){
+			var rng = document.getElementById('customRange3');
+			$('#contentRange3').html(rng.value * 100 +'%');
+			$('.popover').css({'opacity': rng.value});
+		}
 
     </script>
 	<script>
@@ -618,9 +684,6 @@
 				
 				entityMap.getIconFeatureById(`auto${i.toString()}`).setGeometry(new ol.geom.Point([px,py]));
 				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
-
-				//elem = entityMap.getPopupById(`auto${i.toString()}`).getElement();
-				//$(elem).find('.params').html('<p>123123</p>');
 			}
 			for(var i = 5; i < 9; i++){
 				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
@@ -647,5 +710,20 @@
 				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
 			}
 		},100); 
+
+		setInterval(function(){
+			minS = Math.ceil(25);
+			maxS = Math.floor(60);
+			minR = Math.ceil(1200);
+			maxR = Math.floor(2500);
+			for(var i = 1; i < 16; i++){
+				pop = entityMap.getPopupById(`auto${i.toString()}`).getElement();
+				$(pop).find('.params-lines').html(`
+					<p class="m-0">Скорость: ${Math.floor(Math.random() * (maxS - minS)) + minS}км/ч</p>
+					<p class="m-0">Обороты: ${Math.floor(Math.random() * (maxR - minR)) + minR}</p>
+				`);
+			}
+		},1000);
+
 	</script>
 {% endblock %}

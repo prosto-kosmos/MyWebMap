@@ -54,10 +54,16 @@ class MapView(LoginRequiredMixin, View):
             user_data = Data.objects.filter(user = request.user)
         user_data = user_data[0]
         zoom, e, n = user_data.zoom, user_data.position_e, user_data.position_n
+        settings_size_text =  user_data.settings_size_text
+        settings_size_preview = user_data.settings_size_preview
+        settings_opacity_windows = user_data.settings_opacity_windows
         context = {
             'zoom': zoom,
             'position_e': e,
             'position_n': n,
+            'settings_size_text': settings_size_text,
+            'settings_size_preview': settings_size_preview,
+            'settings_opacity_windows': settings_opacity_windows,
             'objects': getStartObjests(),
         }
         template = 'map_page.html'

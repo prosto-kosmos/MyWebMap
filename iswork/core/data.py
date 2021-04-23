@@ -10,14 +10,12 @@ def getStartObjests():
             'params':{
                 'Скорость':'30км/ч',
                 'Обороты':'3091',
-                'Водитель':'Иванов',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8012',
-                'Камера#3':'https://localhost:8012',
-                'Камера#4':'https://localhost:8012',
-                'Камера#5':'https://localhost:8012',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
             },
             'position_n':'6977760.708997443',
             'position_e':'4016570.740906363',
@@ -30,16 +28,16 @@ def getStartObjests():
             'params':{
                 'Скорость':'55км/ч',
                 'Обороты':'2098',
-                'Водитель':'Петров',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8012',
-                'Камера#4':'https://localhost:8012',
-                'Камера#5':'https://localhost:8012',
-                'Камера#6':'https://localhost:8012',
-                'Камера#7':'https://localhost:8012',
-                'Камера#8':'https://localhost:8012',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+                'Камера#5':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#6':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#7':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#8':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
             },
             'position_n':'6990748.408997443',
             'position_e':'4016499.440906363',
@@ -52,10 +50,10 @@ def getStartObjests():
             'params':{
                 'Скорость':'51км/ч',
                 'Обороты':'3012',
-                'Водитель':'Сидоров',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
             },
             'position_n':'6960655.308997443',
             'position_e':'4035489.640906363',
@@ -68,13 +66,12 @@ def getStartObjests():
             'params':{
                 'Скорость':'45км/ч',
                 'Обороты':'123',
-                'Водитель':'Степанов',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8011',
-                'Камера#3':'https://localhost:8011',
-                'Камера#4':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
             },
             'position_n':'6955499.308997443',
             'position_e':'4016601.840906363',
@@ -87,13 +84,12 @@ def getStartObjests():
             'params':{
                 'Скорость':'33км/ч',
                 'Обороты':'4810',
-                'Водитель':'Тимофеев',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8011',
-                'Камера#3':'https://localhost:8011',
-                'Камера#4':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
             },
             'position_n':'6917515.708997443',
             'position_e':'4076666.640906363',
@@ -106,11 +102,10 @@ def getStartObjests():
             'params':{
                 'Скорость':'90км/ч',
                 'Обороты':'1098',
-                'Водитель':'Титов',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
             },
             'position_n':'6907781.308997443',
             'position_e':'4056477.640906363',
@@ -123,14 +118,12 @@ def getStartObjests():
             'params':{
                 'Скорость':'94км/ч',
                 'Обороты':'2001',
-                'Водитель':'Федоров',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8011',
-                'Камера#3':'https://localhost:8011',
-                'Камера#4':'https://localhost:8011',
-                'Камера#5':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
             },
             'position_n':'6928067.298997443',
             'position_e':'4006345.940906363',
@@ -143,12 +136,11 @@ def getStartObjests():
             'params':{
                 'Скорость':'104км/ч',
                 'Обороты':'2701',
-                'Водитель':'Синицин',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8011',
-                'Камера#3':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
             },
             'position_n':'6957810.398997443',
             'position_e':'4046659.540906363',
@@ -161,7 +153,6 @@ def getStartObjests():
             'params':{
                 'Скорость':'123км/ч',
                 'Обороты':'5432',
-                'Водитель':'Федосеев',
             },
             'stream_links':{
             },
@@ -176,15 +167,15 @@ def getStartObjests():
             'params':{
                 'Скорость':'174км/ч',
                 'Обороты':'3009',
-                'Водитель':'Пупкин',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8011',
-                'Камера#3':'https://localhost:8011',
-                'Камера#4':'https://localhost:8011',
-                'Камера#5':'https://localhost:8011',
-                'Камера#6':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+                'Камера#5':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#6':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#7':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
             },
             'position_n':'6957810.398997443',
             'position_e':'4040659.540906363',
@@ -197,10 +188,9 @@ def getStartObjests():
             'params':{
                 'Скорость':'187км/ч',
                 'Обороты':'4093',
-                'Водитель':'Воронин',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
             },
             'position_n':'6943810.398997443',
             'position_e':'4043659.540906363',
@@ -213,7 +203,6 @@ def getStartObjests():
             'params':{
                 'Скорость':'20км/ч',
                 'Обороты':'1987',
-                'Водитель':'Поляков',
             },
             'stream_links':{
             },
@@ -228,7 +217,6 @@ def getStartObjests():
             'params':{
                 'Скорость':'98км/ч',
                 'Обороты':'1098',
-                'Водитель':'Букин',
             },
             'stream_links':{
             },
@@ -243,12 +231,11 @@ def getStartObjests():
             'params':{
                 'Скорость':'100км/ч',
                 'Обороты':'3019',
-                'Водитель':'Понарин',
             },
             'stream_links':{
-                'Камера#1':'https://localhost:8011',
-                'Камера#2':'https://localhost:8011',
-                'Камера#3':'https://localhost:8011',
+                'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
             },
             'position_n':'6933810.398997443',
             'position_e':'4076987.540906363',
@@ -261,7 +248,6 @@ def getStartObjests():
             'params':{
                 'Скорость':'89км/ч',
                 'Обороты':'2376',
-                'Водитель':'Петренко',
             },
             'stream_links':{
             },

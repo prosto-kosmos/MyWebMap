@@ -135,5 +135,27 @@
   margin-top:5px;
   margin-bottom:15px;
   margin-left: 20px;
-  background-color: #c7c7c7;
+  background-color: #fff;
+}
+
+.gsettings-range{
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.gsettings-row{
+  border-bottom: 1px solid rgba(0,0,0,.2);
+  margin-bottom: 10px;
+}
+
+.gsettings-col{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gsettings-val{
+  border: 1px solid rgba(0,0,0,.2);
+  padding: 5px;
+  border-radius: 10px;
 }
