@@ -23,6 +23,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
 	<script src="https://unpkg.com/elm-pep"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+	<script type="text/javascript" src="{% static "jquery.cookie.js" %}"></script>
 	
 	<link rel="stylesheet" href="{% static "mystyles.css" %}">
 	
@@ -90,8 +91,6 @@
 				</div>
 				<div class="modal-body">
 					<div id="videoModalContent"></div>
-					<p id="videoModalText"></p>
-					<img id="videoModalImage" src={% static "videostream.png" %} width=100%>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
@@ -378,8 +377,14 @@
 				var paramsContent = '';
 				var streamLinksContent = '';
 				var streamLinksIndicators = '';
+				var streamLinksIndicatorsFull = '';
 				for(var [param_id, param_value] of params) {
-					paramsContent+= `<p class="m-0">${param_id}: ${param_value}</p>`;
+					if($.cookie(`sw_${param_id}_${entityId}`) != ''){
+						paramsContent+= `<p id="p_sw_${param_id}_${entityId}" class="m-0">${param_id}: ${param_value}</p>`;
+					}	
+					else{
+						paramsContent+= `<p id="p_sw_${param_id}_${entityId}" class="m-0" style="display:none;">${param_id}: ${param_value}</p>`;
+					}				
 				}
 
 				var countCarousel = 0;
@@ -396,6 +401,9 @@
 						streamLinksIndicators+=`
 							<button type="button" data-bs-target="#carousel_${entityId}" data-bs-slide-to="${countCarousel}" class="active" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
 						`;
+						streamLinksIndicatorsFull+=`
+							<button type="button" data-bs-target="#full_carousel_${entityId}" data-bs-slide-to="${countCarousel}" class="active" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
+						`;
 					}
 					else{
 						streamLinksContent+= `
@@ -408,6 +416,9 @@
 						`;
 						streamLinksIndicators+=`
 							<button type="button" data-bs-target="#carousel_${entityId}" data-bs-slide-to="${countCarousel}" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
+						`;
+						streamLinksIndicatorsFull+=`
+							<button type="button" data-bs-target="#full_carousel_${entityId}" data-bs-slide-to="${countCarousel}" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
 						`;
 					}
 					
@@ -487,7 +498,29 @@
 								keyboard: false
 							});
 							document.getElementById('videoModalTitle').innerHTML = `Видеопоток ${entityMap.getModelById(entityId)}`;
-							document.getElementById('videoModalText').innerHTML = `Номер: <i>${entityMap.getNumberById(entityId)}</i>`;
+							document.getElementById('videoModalContent').innerHTML = `
+								<div id="full_carousel_${entityId}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+								  	<div class="carousel-indicators">
+										${streamLinksIndicatorsFull}
+									</div>
+									<div class="carousel-inner">
+										${streamLinksContent}
+									</div>
+									<button class="carousel-control-prev" type="button" data-bs-target="#full_carousel_${entityId}" data-bs-slide="prev">
+										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Previous</span>
+									</button>
+									<button class="carousel-control-next" type="button" data-bs-target="#full_carousel_${entityId}" data-bs-slide="next">
+										<span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Next</span>
+									</button>
+								</div>
+							`;
+							/*$('#videoModal').on('show.bs.modal', function () {
+								$('.modal .modal-dialog').css('overflow-y', 'auto'); 
+								alert($('.modal .modal-dialog').css('height'));
+    							$('.modal .modal-dialog').css('max-width', $(window).width() - 1000);
+							});*/
 							videoModal.show();
 						});
 						$(element).find('#span_settings').on('click', function(e) {
@@ -495,6 +528,43 @@
 								keyboard: false
 							});
 							document.getElementById('settingsModalTitle').innerHTML = `Настройки ${entityMap.getModelById(entityId)}`;
+							
+							var settingsContent = '';
+							for(var [param_id, param_value] of params) {
+								var isCheck = 'checked';
+								if($.cookie(`sw_${param_id}_${entityId}`) != undefined){
+									isCheck = $.cookie(`sw_${param_id}_${entityId}`);
+								}
+								
+								settingsContent+= `
+									<div class="row">
+										<div class="col">
+											<label for="sw_${param_id}_${entityId}" class="form-label">${param_id}</label>
+										</div>
+										<div class="col-2 gsettings-col">
+											<div class="form-check form-switch">
+												<input id="sw_${param_id}_${entityId}" class="form-check-input" type="checkbox" ${isCheck}>
+											</div>
+										</div>
+									</div>
+								`;								
+							}
+							document.getElementById('settingsModalContent').innerHTML = settingsContent;
+							
+							for(var [param_id, param_value] of params) {
+								var swParam = document.getElementById(`sw_${param_id}_${entityId}`);
+								swParam.addEventListener("change", function () {
+									if (this.checked){
+										$.cookie(`${this.id}`, 'checked');
+										$(`#p_${this.id}`).css({'display': ''});
+									}
+									else{
+										$.cookie(`${this.id}`, '');
+										$(`#p_${this.id}`).css({'display': 'none'});
+									}
+								}, false);
+								
+							}						
 							settingsModal.show();
 						});
 
@@ -736,9 +806,11 @@
 			maxR = Math.floor(2500);
 			for(var i = 1; i < 16; i++){
 				pop = entityMap.getPopupById(`auto${i.toString()}`).getElement();
-				$(pop).find('.params-lines').html(`
-					<p class="m-0">Скорость: ${Math.floor(Math.random() * (maxS - minS)) + minS}км/ч</p>
-					<p class="m-0">Обороты: ${Math.floor(Math.random() * (maxR - minR)) + minR}</p>
+				$(pop).find(`#p_sw_Скорость_auto${i.toString()}`).html(`
+					Скорость: ${Math.floor(Math.random() * (maxS - minS)) + minS}км/ч
+				`);
+				$(pop).find(`#p_sw_Обороты_auto${i.toString()}`).html(`
+					Обороты: ${Math.floor(Math.random() * (maxR - minR)) + minR}
 				`);
 			}
 		},1000);
