@@ -681,8 +681,9 @@
 				let sws = document.getElementsByClassName('view-object');
 				for(var j = 0; j < sws.length; j++){
 					if (sws[j].getAttribute('id') == car_id){
-						sws[j].checked = 1;
-						featureIcon.setStyle(iconStyle);
+						if(!sws[j].checked){
+							sws[j].click();
+						}
 						break;
 					}
 				}
@@ -695,8 +696,10 @@
 					featureIcon.setStyle(new ol.style.Style({}));
 					var p = entityMap.getPopupById(car_id).getElement();
 					$(p).popover('dispose');
+					$.cookie(`view_${car_id}`, '');
 				} else {
 					featureIcon.setStyle(iconStyle);
+					$.cookie(`view_${car_id}`, 'checked');
 				}
 			}, false);
 		}
@@ -710,6 +713,13 @@
 				}
 			}
 		}, false);
+
+		// Считывание из куки видимость каждого entity
+		for(var j = 0; j < view_switch.length; j++){
+			if ($.cookie(`view_${view_switch[j].id}`) == ''){
+				view_switch[j].click();
+			}	
+		}
 
 		// Обработка ползунков настроек
 		function dragRange1(){
