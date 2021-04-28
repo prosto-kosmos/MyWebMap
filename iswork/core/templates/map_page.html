@@ -32,6 +32,7 @@
 {% block content %}
 	<div id="fullscreen" class="fullscreen">
     	
+		<!-- Разметка окон с параметрами и превью -->
 		{% for auto_id, value in objects.items %}
 			<div style="display: none;">
 				<div id="popup_{{auto_id}}" style="position:absolute;">
@@ -39,6 +40,7 @@
 			</div>
 		{% endfor %}
 		
+		<!-- Разметка панели списка отображаемых объектов -->
 		<div class="sidepanel" id="sidepanel">
 			<div id="objectslist" class="list-group" style="height:100%">
 				<div class="overflow-auto p-1" style="height:100%">
@@ -79,9 +81,11 @@
 				</div>
             </div>
 		</div>
+
+		<!-- Разметка карты -->
 		<div id="map" class="map"></div>
 		
-		<!-- Video Modal -->
+		<!-- Модальное окно с подробным отображением видеопотока -->
 		<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -99,7 +103,7 @@
 			</div>
 		</div>
 
-		<!-- Settings Modal -->
+		<!-- Модальное окно с настройками отбражаемых объектов -->
 		<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -117,7 +121,7 @@
 			</div>
 		</div>
 
-		<!-- Global Settings Modal -->
+		<!-- Модальное окно сглобальных настроек -->
 		<div class="modal fade" id="globalSettingsModal" tabindex="-1" aria-labelledby="globalSettingsModalTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -180,24 +184,28 @@
 		</div>
     </div>
 
-	
+	<!-- Подключение класса отображаемого объекта, в дальнейшем "отображаемый объект" и "Entity" - синонимы -->
 	<script src="{% static "Entity.js" %}"></script>
+
+	<!-- Подключение класса - контейнера хранения Entity. EntityMap наследуется от Map -->
 	<script src="{% static "EntityMap.js" %}"></script>
-    <script type="text/javascript">
-		
-		// Функционал подгона высоты
+
+
+    <script>
+
+		// Функционал подгона высоты родительского div
 		$('#fullscreen').css({'height':`${document.documentElement.clientHeight-70}px`});
 		window.addEventListener('resize', function() {
 			$('#fullscreen').css({'height':`${document.documentElement.clientHeight-70}px`});
 		});
 
-		// Функционал поиска по элемента списка
+		// Функционал поиска Entity в списке
 		var options = {
 			valueNames: ['model', 'number']
 		};
 		var userList = new List('objectslist', options);
 
-		// Объект отображения entity на карте 
+		// Создание объекта-указателя Entity на карте 
 		var iconStyle = new ol.style.Style({
 			image: new ol.style.Icon({
 				anchor: [0.4475, 32],
@@ -207,13 +215,13 @@
 			}),
 		});
 
-		// Создание контейнера entity
+		// Создание контейнера Entity
 		entityMap = new EntityMap();
 
-		// Парсинг полученных entity
+		// Парсинг полученных Entity
 		{% for auto_id, value in objects.items %}
 			(function(entityMap){
-				let entity = new Entity('{{auto_id}}');
+				var entity = new Entity('{{auto_id}}');
 				entity.setEnabled = '{{value.enabled}}';
 				entity.setNumber = '{{value.number}}';
 				entity.setModel = '{{value.model}}';
@@ -253,7 +261,7 @@
 			source: vectorSource,
 		});
 
-		// Управление SidePanel
+		// Управление SidePanel - панелью со списком Entity
 		var ShowListEntity = /*@__PURE__*/(function (Control) {
 			function ShowListEntity(opt_options) {
 				var options = opt_options || {};
@@ -344,7 +352,7 @@
 			});
 		});
 
-		// Заполнение контейнера entity объектами окон подсказок 
+		// Заполнение контейнера Entity объектами окон параметров и превью 
 		for(var [auto_id, value] of entityMap.entries()) {
 			var popup = new ol.Overlay({
 				element: document.getElementById('popup_' + auto_id),
@@ -356,8 +364,18 @@
 			map.addOverlay(popup);
 		}
 
-		// Нажатие на иконку entity
+		// Нажатие на иконку Entity
 		map.on('click', function (evt) {
+			// Содержимое окон параметров и превью заполняется только при появлении этого окна
+			// Костыли, написанные в этом блоке, позволяют динамически формировать содержимое этих окон
+			// Не пытайтесь разобраться и понять неэффективные методы, используемые в этом блоке
+			// Лучше перепишите по-новой, либо используйте доступный функционал
+
+			// Суть ниженаписанного состоит в следующем:
+			// Сначала динамически формируются блоки контекста окна, в зависими от значения переменных
+			// Эти блоки включаются в другие, более общие блоки
+			// Затем, по идентификатору указателя(иконки) по которому произошло нажатие, контекст появляется в окнах над ними
+
 			var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
 				return feature;
 			});
@@ -371,13 +389,18 @@
 				$(element).popover('dispose');
 				popup.setPosition(coordinates);
 				
-				var flagSetListener = false; // флаг установки обработчиков
+				var flagSetListener = false; // флаг нужен чтобы избежать создание лишних обработчиков
 				var params = entityMap.get(entityId).getParams; // map параметров entity
 				var streamLinks = entityMap.get(entityId).getStreamLinks; // map видеопотоков entity
 				var paramsContent = '';
 				var streamLinksContent = '';
 				var streamLinksIndicators = '';
 				var streamLinksIndicatorsFull = '';
+
+				// Формирование блока со списком параметров:
+				// Данные настроек (показать(скрыть)) параметр хранятся в куки
+				// Ключ куки: id переключателя параметра в настройках
+				// Значение: "checked" или если не определен - показать, "" - скрыть 
 				for(var [param_id, param_value] of params) {
 					if($.cookie(`sw_${param_id}_${entityId}`) != ''){
 						paramsContent+= `<p id="p_sw_${param_id}_${entityId}" class="m-0">${param_id}: ${param_value}</p>`;
@@ -386,7 +409,8 @@
 						paramsContent+= `<p id="p_sw_${param_id}_${entityId}" class="m-0" style="display:none;">${param_id}: ${param_value}</p>`;
 					}				
 				}
-
+				
+				// Формирование блока отображения видеопотока
 				var countCarousel = 0;
 				for(var [link_id, link_value] of streamLinks) {
 					if(!countCarousel){
@@ -434,6 +458,8 @@
 					`;
 				}
 
+				// Инициализация окна над указателем.
+				// Выполняем заполнение контентом только при событии появления окна
 				$(element).popover({
 					container: element,
 					placement: 'top',
@@ -483,6 +509,7 @@
 							</div>`
 						);
 
+						// Применение глобыльных настроек
 						var rng1 = document.getElementById('customRange1');
 						var rng2 = document.getElementById('customRange2');
 						var rng3 = document.getElementById('customRange3');
@@ -490,9 +517,12 @@
 						$('.carousel-inner').css({'width': rng2.value +'px'});
 						$('.popover').css({'opacity': rng3.value});
 
+						// Обработка закрытия окна
 						$(element).find('#cancel_popup').on('click', function(e) {
 							$(element).popover('dispose');
 						});
+
+						// Обработка нажатия на кнопку "Видео" - подробный видеопоток от Entity
 						$(element).find('#span_video').on('click', function(e) {
 							var videoModal = new bootstrap.Modal(document.getElementById('videoModal'), {
 								keyboard: false
@@ -516,13 +546,10 @@
 									</button>
 								</div>
 							`;
-							/*$('#videoModal').on('show.bs.modal', function () {
-								$('.modal .modal-dialog').css('overflow-y', 'auto'); 
-								alert($('.modal .modal-dialog').css('height'));
-    							$('.modal .modal-dialog').css('max-width', $(window).width() - 1000);
-							});*/
 							videoModal.show();
 						});
+
+						// Обработка нажатия на кнопку "Настройки" - локальные настройки Entity
 						$(element).find('#span_settings').on('click', function(e) {
 							var settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'), {
 								keyboard: false
@@ -568,6 +595,7 @@
 							settingsModal.show();
 						});
 
+						// Обработка нажатия на кнопку "»" - показать превью
 						$(element).find('#span_more').on('click', function(e) {
 							settings_block = $(element).find('.more-settings');
 							header_block = $(element).find('.popover-header');
@@ -583,6 +611,8 @@
 								button_more.css({'display':'inline-flex'});
 							}
 						});
+
+						// Обработка нажатия на кнопку "«" - скрыть превью
 						$(element).find('#span_less').on('click', function(e) {
 							settings_block = $(element).find('.more-settings');
 							header_block = $(element).find('.popover-header');
@@ -610,6 +640,7 @@
 				$(element).parent().css({"z-index":zIndexPopupCount});
 				$(element).popover('show');
 
+				// При нажатии на окно, оно появляется поверх остальных окон
 				$(element).on('click', function (eventShown) {	
 					zIndexPopupCount +=1;
 					$(element).parent().css({"z-index":zIndexPopupCount});	
@@ -620,7 +651,7 @@
 			}
 		});
 
-		// Изменение курсора при наведении на указатель entity
+		// Изменение курсора при наведении на указатель Entity
 		map.on('pointermove', function (evt) {
 			var hit = this.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
 				return true;
@@ -632,7 +663,7 @@
 			}
 		});
 
-		// Функция отрисовки фокуса на указателе entity
+		// Функция отрисовки фокуса (круга) на указателе Entity
 		function drowCircle(feature) {
 			var start = new Date().getTime();
 			var listenerKey = vectorLayer.on('postrender', animate);
@@ -668,7 +699,7 @@
 			}
 		}
 
-		// Обработка событий фокуса и показа/скрытия указателей entity
+		// Обработка событий фокуса и показа/скрытия указателей Entity
 		var view_button_show = document.querySelectorAll(".show");
 		var view_switch = document.querySelectorAll(".view-object");
 		for (var i = 0; i < view_button_show.length; i++) {
@@ -704,7 +735,7 @@
 			}, false);
 		}
 
-		// Обработка события показа/скрытия всех указателей entity
+		// Обработка события показа(скрытия) всех указателей entity
 		var view_switch_all = document.getElementById("all_show");
 		view_switch_all.addEventListener("change", function () {
 			for(var j = 0; j < view_button_show.length; j++){
@@ -714,7 +745,7 @@
 			}
 		}, false);
 
-		// Считывание из куки видимость каждого entity
+		// Считывание из куки видимость каждого Entity
 		for(var j = 0; j < view_switch.length; j++){
 			if ($.cookie(`view_${view_switch[j].id}`) == ''){
 				view_switch[j].click();
@@ -759,6 +790,7 @@
 		}
 
     </script>
+	
 	<script>
 		setInterval(function(){
 			/*$.ajax({
