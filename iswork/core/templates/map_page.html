@@ -121,7 +121,7 @@
 			</div>
 		</div>
 
-		<!-- Модальное окно сглобальных настроек -->
+		<!-- Модальное окно глобальных настроек -->
 		<div class="modal fade" id="globalSettingsModal" tabindex="-1" aria-labelledby="globalSettingsModalTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
@@ -171,6 +171,16 @@
 							<div class="col-2 gsettings-col">
 								<div class="form-check form-switch">
 									<input id="all_show" class="form-check-input" type="checkbox" checked>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label for="all_show_param" class="form-label">Показать (скрыть) все окна с параметрами</label>
+							</div>
+							<div class="col-2 gsettings-col">
+								<div class="form-check form-switch">
+									<input id="all_show_param" class="form-check-input" type="checkbox" checked>
 								</div>
 							</div>
 						</div>
@@ -423,7 +433,7 @@
 							</div>
 						`;
 						streamLinksIndicators+=`
-							<button type="button" data-bs-target="#carousel_${entityId}" data-bs-slide-to="${countCarousel}" class="active" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
+							<button type="button" style="background-color: green;" data-bs-target="#carousel_${entityId}" data-bs-slide-to="${countCarousel}" class="active" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
 						`;
 						streamLinksIndicatorsFull+=`
 							<button type="button" data-bs-target="#full_carousel_${entityId}" data-bs-slide-to="${countCarousel}" class="active" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
@@ -439,7 +449,7 @@
 							</div>
 						`;
 						streamLinksIndicators+=`
-							<button type="button" data-bs-target="#carousel_${entityId}" data-bs-slide-to="${countCarousel}" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
+							<button type="button" style="background-color: green;" data-bs-target="#carousel_${entityId}" data-bs-slide-to="${countCarousel}" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
 						`;
 						streamLinksIndicatorsFull+=`
 							<button type="button" data-bs-target="#full_carousel_${entityId}" data-bs-slide-to="${countCarousel}" aria-current="true" aria-label="Slide ${countCarousel+1}"></button>
@@ -465,46 +475,71 @@
 					placement: 'top',
 					animation: false,
 					html: true,
-					title : `<div class="row">
-								<div class="col-10">
-									<span>${entityMap.getModelById(entityId)}</span>
-								</div> 
-								<div class="col-2">
-									<div class="d-flex justify-content-end"><a id="cancel_popup" class="btn-close set-cursor"></a></div>
-								</div>`,
+					title : '<div></div>',
 					content:'',
 
 				}).on('shown.bs.popover', function (eventShown) {
 					if(!flagSetListener){	
 						$(element).find('.popover-body').html(
-							`<div class="params p-2">
+							`<div class="params p-1">
 								<div class="params-lines">
 									${paramsContent}
-								</div>								
-								<span id="span_more" class="badge set-cursor settings-button more-button ms-1">»</span>
+								</div>
+							</div>
+							<div class="params-btns">
+								<span id="span_close_min" class="badge set-cursor settings-button close-button my-1 mx-1">x</span>
+								<span id="span_more" class="badge set-cursor settings-button more-button mb-1 mx-1">»</span>
 							</div>
 							<div class="more-settings p-2">
 								<!--<img src={% static "videostream.png" %} width="150px">-->
-								<div id="carousel_${entityId}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
-								  	<div class="carousel-indicators">
-										${streamLinksIndicators}
-									</div>
+								<div id="carousel_${entityId}" class="carousel slide" style="padding-bottom: 20px;" data-bs-ride="carousel" data-bs-interval="false">								  	
 									<div class="carousel-inner">
 										${streamLinksContent}
 									</div>
-									<button class="carousel-control-prev" type="button" data-bs-target="#carousel_${entityId}" data-bs-slide="prev">
+									<div class="carousel-indicators carousel-preview">
+										${streamLinksIndicators}
+									</div>
+									<!--<button class="carousel-control-prev" type="button" data-bs-target="#carousel_${entityId}" data-bs-slide="prev">
 										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 										<span class="visually-hidden">Previous</span>
 									</button>
 									<button class="carousel-control-next" type="button" data-bs-target="#carousel_${entityId}" data-bs-slide="next">
 										<span class="carousel-control-next-icon" aria-hidden="true"></span>
 										<span class="visually-hidden">Next</span>
-									</button>
+									</button>-->
 								</div>
-								<div class="d-flex justify-content-end mt-1">
+								<!--<div class="d-flex justify-content-end mt-1">
 									<span id="span_less" class="badge set-cursor settings-button">«</span>
 									<span id="span_video" class="badge mx-1 set-cursor settings-button">Видео</span>
 									<span id="span_settings" class="badge set-cursor settings-button">Настройки</span>
+								</div>-->
+							</div>`
+						);
+
+						$(element).find('.popover-header').html(
+							`<div class="row">
+								<div class="col-7">
+									<span>${entityMap.getModelById(entityId)}</span>
+								</div> 
+								<div class="col-5" style="padding-right: 5px;">
+									<div class="d-flex justify-content-end" style="padding-bottom: 5px;">									
+										<span id="span_settings" class="badge set-cursor settings-button">
+											<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+												<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"></path>
+												<path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"></path>
+											</svg>
+										</span>
+										<span id="span_less" class="badge set-cursor settings-button ms-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
+												<path d="M0 8a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H1a1 1 0 0 1-1-1z"/>
+											</svg>
+										</span>
+										<span id="span_close" class="badge set-cursor settings-button ms-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+												<path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+											</svg>
+										</span>
+									</div>
 								</div>
 							</div>`
 						);
@@ -518,9 +553,9 @@
 						$('.popover').css({'opacity': rng3.value});
 
 						// Обработка закрытия окна
-						$(element).find('#cancel_popup').on('click', function(e) {
+						/*$(element).find('#span_close').on('click', function(e) {
 							$(element).popover('dispose');
-						});
+						});*/
 
 						// Обработка нажатия на кнопку "Видео" - подробный видеопоток от Entity
 						$(element).find('#span_video').on('click', function(e) {
@@ -600,33 +635,47 @@
 							settings_block = $(element).find('.more-settings');
 							header_block = $(element).find('.popover-header');
 							button_more = $(element).find('#span_more');
+							button_close = $(element).find('#span_close_min');
 							if(settings_block.css('display')=='none'){
 								settings_block.css({'display':'block'});
 								header_block.css({'display':'block'});
 								button_more.css({'display':'none'});
+								button_close.css({'display':'none'});
 							}
 							else{
 								settings_block.css({'display':'none'});
 								header_block.css({'display':'none'});
 								button_more.css({'display':'inline-flex'});
+								button_close.css({'display':'inline-flex'});
 							}
 						});
 
-						// Обработка нажатия на кнопку "«" - скрыть превью
+						// Обработка нажатия на кнопку "-" - скрыть превью
 						$(element).find('#span_less').on('click', function(e) {
 							settings_block = $(element).find('.more-settings');
 							header_block = $(element).find('.popover-header');
 							button_more = $(element).find('#span_more');
+							button_close = $(element).find('#span_close_min');
 							if(settings_block.css('display')=='block'){
 								settings_block.css({'display':'none'});
 								header_block.css({'display':'none'});
 								button_more.css({'display':'inline-flex'});
+								button_close.css({'display':'inline-flex'});
 							}
 							else{
 								settings_block.css({'display':'block'});
 								header_block.css({'display':'block'});
 								button_more.css({'display':'none'});
+								button_close.css({'display':'none'});
 							}
+						});
+
+						// Обработка закрытия окна
+						$(element).find('#span_close').on('click', function(e) {
+							$(element).popover('dispose');
+						});
+						$(element).find('#span_close_min').on('click', function(e) {
+							$(element).popover('dispose');
 						});
 
 						flagSetListener=true;
@@ -745,6 +794,21 @@
 			}
 		}, false);
 
+		// Обработка события показа(скрытия) всех окон
+		var view_switch_all = document.getElementById("all_show_param");
+		view_switch_all.addEventListener("change", function () {
+			if (this.checked){
+				for(var [auto_id, value] of entityMap.entries()) {
+					entityMap.getIconFeatureById(auto_id).click();
+				}
+			}
+			/*for(var j = 0; j < view_button_show.length; j++){
+				if (view_switch[j].checked != this.checked){
+					view_switch[j].click();
+				}
+			}*/
+		}, false);
+
 		// Считывание из куки видимость каждого Entity
 		for(var j = 0; j < view_switch.length; j++){
 			if ($.cookie(`view_${view_switch[j].id}`) == ''){
@@ -841,7 +905,7 @@
 			}
 		},100); 
 
-		setInterval(function(){
+		/*setInterval(function(){
 			minS = Math.ceil(25);
 			maxS = Math.floor(60);
 			minR = Math.ceil(1200);
@@ -855,7 +919,7 @@
 					Обороты: ${Math.floor(Math.random() * (maxR - minR)) + minR}
 				`);
 			}
-		},1000);
+		},1000);*/
 
 	</script>
 {% endblock %}

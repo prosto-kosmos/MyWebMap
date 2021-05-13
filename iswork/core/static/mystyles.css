@@ -82,6 +82,10 @@
 
 .popover-header{
   display: none;
+  padding-left: 10px;
+  padding-top: 3px;
+  padding-bottom: 0px;
+  font-size: 0.8rem;
 }
 
 .set-cursor{
@@ -94,6 +98,11 @@
 
 .params-lines{
   white-space: nowrap;
+}
+
+.params-btns{
+  display: flex;
+  flex-direction:column;
 }
 
 .popover{
@@ -111,6 +120,13 @@
 }
 
 .more-button{
+  padding: revert;
+  display: inline-flex;
+  align-items: center; 
+  height: 100%;
+}
+
+.close-button{
   padding: revert;
   display: inline-flex;
   align-items: center; 

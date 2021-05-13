@@ -10,12 +10,18 @@ def getStartObjests():
             'params':{
                 'Скорость':'30км/ч',
                 'Обороты':'3091',
+                'Обороты1':'3091',
+                'Обороты2':'3091',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
                 'Камера#2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
                 'Камера#3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
                 'Камера#4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+                'Камера#5':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                'Камера#6':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                'Камера#7':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                'Камера#8':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
             },
             'position_n':'6977760.708997443',
             'position_e':'4016570.740906363',
