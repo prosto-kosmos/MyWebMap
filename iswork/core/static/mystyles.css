@@ -120,14 +120,14 @@
 }
 
 .more-button{
-  padding: revert;
+  padding: unset;
   display: inline-flex;
   align-items: center; 
   height: 100%;
 }
 
 .close-button{
-  padding: revert;
+  padding: unset;
   display: inline-flex;
   align-items: center; 
 }

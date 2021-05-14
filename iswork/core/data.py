@@ -10,8 +10,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'30км/ч',
                 'Обороты':'3091',
-                'Обороты1':'3091',
-                'Обороты2':'3091',
+                'Температура':'30℃',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -34,6 +33,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'55км/ч',
                 'Обороты':'2098',
+                'Температура':'90℃',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -56,6 +56,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'51км/ч',
                 'Обороты':'3012',
+                'Температура':'97℃',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -72,6 +73,8 @@ def getStartObjests():
             'params':{
                 'Скорость':'45км/ч',
                 'Обороты':'123',
+                'Температура':'54℃',
+                'Заслонка':'96%',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -90,6 +93,8 @@ def getStartObjests():
             'params':{
                 'Скорость':'33км/ч',
                 'Обороты':'4810',
+                'Температура':'98℃',
+                'Заслонка':'95%',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -108,6 +113,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'90км/ч',
                 'Обороты':'1098',
+                'Заслонка':'97%',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -124,6 +130,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'94км/ч',
                 'Обороты':'2001',
+                'Заслонка':'95%',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -142,6 +149,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'104км/ч',
                 'Обороты':'2701',
+                'Заслонка':'93%',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -159,6 +167,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'123км/ч',
                 'Обороты':'5432',
+                'Заслонка':'90%',
             },
             'stream_links':{
             },
@@ -173,6 +182,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'174км/ч',
                 'Обороты':'3009',
+                'Заслонка':'89%',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
@@ -194,6 +204,7 @@ def getStartObjests():
             'params':{
                 'Скорость':'187км/ч',
                 'Обороты':'4093',
+                'Заслонка':'98%',
             },
             'stream_links':{
                 'Камера#1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
