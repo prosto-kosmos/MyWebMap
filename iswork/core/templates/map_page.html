@@ -44,7 +44,7 @@
 		<div class="sidepanel" id="sidepanel">
 			<div id="objectslist" class="list-group" style="height:100%">
 				<div class="overflow-auto p-1" style="height:100%">
-					<ul class="list">
+					<ul id="list" class="list">
 						{% for auto_id, value in objects.items %}
 							<a href="#" id="{{auto_id}}" class="list-group-item list-group-item-action">
 								<div class="d-flex w-100 justify-content-between">
@@ -215,6 +215,12 @@
 		};
 		var userList = new List('objectslist', options);
 
+		// Функционал сортировки в списке
+		$(function() {
+			$("#list").sortable();
+			$("#list").disableSelection();
+		});
+		
 		// Создание объекта-указателя Entity на карте 
 		var iconStyle = new ol.style.Style({
 			image: new ol.style.Icon({
