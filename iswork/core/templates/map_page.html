@@ -24,7 +24,9 @@
 	<script src="https://unpkg.com/elm-pep"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 	<script type="text/javascript" src="{% static "jquery.cookie.js" %}"></script>
-	
+
+	<script src="{% static "jquery.splitter.js" %}"></script>
+    <link href="{% static "jquery.splitter.css" %}" rel="stylesheet"/>	
 	<link rel="stylesheet" href="{% static "mystyles.css" %}">
 	
 {% endblock %}
@@ -36,13 +38,13 @@
 		{% for auto_id, value in objects.items %}
 			<div style="display: none;">
 				<div id="popup_{{auto_id}}" style="position:absolute;">
-                </div>
+				</div>
 			</div>
 		{% endfor %}
-		
+	
 		<!-- Разметка панели списка отображаемых объектов -->
 		<div class="sidepanel" id="sidepanel">
-			<div id="objectslist" class="list-group" style="height:100%">
+			<div id="objectslist" class="list-group" style="height:100%; width: 300px;">
 				<div class="overflow-auto p-1" style="height:100%">
 					<ul id="list" class="list">
 						{% for auto_id, value in objects.items %}
@@ -79,13 +81,34 @@
 						</div>
 					</div>
 				</div>
-            </div>
+			</div>
 		</div>
 
-		<!-- Разметка карты -->
-		<div id="map" class="map"></div>
-		
-		<div></div>
+		<div id="widget" style="display: flex; height:100%; width:100%;">
+			<!-- Разметка карты -->
+			<div id="map" class="map"></div>
+
+			<div class="streampanel">
+				<div id="objectstreamlist" class="list-group" style="height:100%;">
+					<div class="overflow-auto p-1" style="height:100%">
+						<ul id="liststream" class="list">
+							<!--<a href="#" id="1" class="list-group-item list-group-item-action">
+								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
+							</a>
+							<a href="#" id="1" class="list-group-item list-group-item-action">
+								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
+							</a>
+							<a href="#" id="1" class="list-group-item list-group-item-action">
+								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
+							</a>
+							<a href="#" id="1" class="list-group-item list-group-item-action">
+								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
+							</a>-->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<!-- Модальное окно с подробным отображением видеопотока -->
 		<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalTitle" aria-hidden="true">
@@ -221,7 +244,19 @@
 		$(function() {
 			$("#list").sortable();
 			$("#list").disableSelection();
+			$("#liststream").sortable();
+			$("#liststream").disableSelection();
 		});
+
+		var splitter = $('#widget').split({
+			orientation: 'vertical',
+			limit: 150,
+			position: '85%', 
+			onDrag: function(event) {
+				map.updateSize();
+			}
+		});
+		$('.vsplitter').css({'background-color': 'darkgrey'});
 		
 		// Создание объекта-указателя Entity на карте 
 		var iconStyle = new ol.style.Style({
@@ -298,14 +333,15 @@
 					
 				button.addEventListener('click', function(){
 					if (this.innerHTML == '«'){
-						document.getElementById('map').style.marginLeft = "0px";
 						document.getElementById('sidepanel').hidden = true;
+						splitter.refresh();
 						map.updateSize();
 						this.innerHTML = '»';
 					} 
 					else {
-						document.getElementById('map').style.marginLeft = "300px";
+						//document.getElementById('widget').style.marginLeft = "300px";
 						document.getElementById('sidepanel').hidden = false;
+						splitter.refresh();
 						map.updateSize();
 						this.innerHTML = '«';
 					}
@@ -368,6 +404,8 @@
 					console.log(data);
 				}
 			});
+			$('#fullscreen').css({'height':`${document.documentElement.clientHeight-70}px`});
+			map.updateSize();
 		});
 
 		// Заполнение контейнера Entity объектами окон параметров и превью 
