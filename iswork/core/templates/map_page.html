@@ -28,7 +28,7 @@
 	<script src="{% static "jquery.splitter.js" %}"></script>
     <link href="{% static "jquery.splitter.css" %}" rel="stylesheet"/>	
 	<link rel="stylesheet" href="{% static "mystyles.css" %}">
-	
+
 {% endblock %}
 
 {% block content %}
@@ -65,20 +65,15 @@
 					</ul>
 				</div>
 				<div class="container">
-					<div class="row align-items-center">
-						<div class="col-8">
-							<input class="search" placeholder="Поиск"/>
-						</div>
-						<div class="col-4">
-							<i class="bi bi-gear"></i>
-							<button type="button" class="btn btn-outline-secondary btn-global-settings" data-bs-toggle="modal" data-bs-target="#globalSettingsModal">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-									<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-									<path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-								</svg>
-								<span class="visually-hidden">Button</span>
-							</button>
-						</div>
+					<div class="input-group">
+						<input class="search" placeholder="Поиск"/>
+						<button type="button" class="btn btn-outline-secondary btn-global-settings" data-bs-toggle="modal" data-bs-target="#globalSettingsModal">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+								<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+								<path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+							</svg>
+							<span class="visually-hidden">Button</span>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -92,18 +87,6 @@
 				<div id="objectstreamlist" class="list-group" style="height:100%;">
 					<div class="overflow-auto p-1" style="height:100%">
 						<ul id="liststream" class="list">
-							<!--<a href="#" id="1" class="list-group-item list-group-item-action">
-								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
-							</a>
-							<a href="#" id="1" class="list-group-item list-group-item-action">
-								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
-							</a>
-							<a href="#" id="1" class="list-group-item list-group-item-action">
-								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
-							</a>
-							<a href="#" id="1" class="list-group-item list-group-item-action">
-								<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
-							</a>-->
 						</ul>
 					</div>
 				</div>
@@ -248,6 +231,7 @@
 			$("#liststream").disableSelection();
 		});
 
+		var streamPanelEl = document.getElementById('streampanel');
 		var splitter = $('#widget').split({
 			orientation: 'vertical',
 			limit: 150,
@@ -420,6 +404,23 @@
 			map.addOverlay(popup);
 		}
 
+		// 
+		for(var [auto_id, value] of entityMap.entries()) {
+			for(var [stream_id, stream_link] of value.getStreamLinks.entries()) {
+				$(document.getElementById('liststream')).append(`
+					<div id="${value.getID}" style="padding: 5px;" class="list-group-item list-group-item-action">
+						<h3 style="font-size:10px; margin: 0;">${value.getModel}</h3>
+						<h5 style="font-size:7px; margin: 0;">${stream_id}</h5>
+						<img src="${stream_link}" class="d-block w-100" alt="Нет видеопотоков">
+					</div>
+				`);
+			}
+		}
+
+		/*function setFontSizeVideostreamList(){
+			$('#liststream h1').css({'font-size': $('#liststream').width()/100*8});
+		}*/
+		
 		// Функция показа окна с параметрами
 		function showWindow (feature){
 			var entityId = feature.get('name');

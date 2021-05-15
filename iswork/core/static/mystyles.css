@@ -61,9 +61,9 @@
   border-radius: 5px;
   padding:7px 14px;
   
-  width:210px;
-  margin-top:5px;
-  margin-bottom:15px;
+  width:235px;
+  margin-top:10px;
+  margin-bottom:10px;
 }
 
 .rotate-north {
@@ -156,9 +156,8 @@
 }
 
 .btn-global-settings{
-  margin-top:5px;
-  margin-bottom:15px;
-  margin-left: 20px;
+  margin-top:10px;
+  margin-bottom:10px;
   background-color: #fff;
 }
 
