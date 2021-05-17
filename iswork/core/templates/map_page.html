@@ -45,7 +45,7 @@
 		<!-- Разметка панели списка отображаемых объектов -->
 		<div class="sidepanel" id="sidepanel">
 			<div id="objectslist" class="list-group" style="height:100%; width: 300px;">
-				<div class="overflow-auto p-1" style="height:100%">
+				<div id="containerlist" class="p-1" style="height:100%;">
 					<ul id="list" class="list">
 						{% for auto_id, value in objects.items %}
 							<a href="#" id="{{auto_id}}" class="list-group-item list-group-item-action">
@@ -53,8 +53,57 @@
 									<h5 class="mb-1 model">{{value.model}}</h5>
 									<small class="text-muted">
 										<div class="form-check form-switch">
-											<span id="{{auto_id}}" class="badge bg-primary show">Show</span>
-											<input id="{{auto_id}}" class="form-check-input view-object" type="checkbox" checked>
+											<div class="btn-group dropend">
+												<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+													{% comment %}  {% endcomment %}
+												</button>
+												<ul class="dropdown-menu">
+													<li><div class="dropdown-item">
+														<div class="row">
+															<div class="col">
+																<label for="{{auto_id}}" class="form-label">Показать (скрыть) указатель</label>
+															</div>
+															<div class="col-2 gsettings-col">
+																<div class="form-check form-switch">
+																	<input id="{{auto_id}}" class="form-check-input view-object" type="checkbox" checked>
+																</div>
+															</div>
+														</div>
+													</div></li>
+													<li><hr class="dropdown-divider"></li>
+
+													<li><div class="dropdown-item">
+														<div class="row">
+															<div class="col">
+																<label for="{{auto_id}}" class="form-label">Сфокусироваться на объекте</label>
+															</div>
+															<div class="col-2 gsettings-col">
+																<div class="form-check form-switch">
+																	{% comment %} <span id="{{auto_id}}" class="badge bg-primary show">Show</span> {% endcomment %}
+																</div>
+															</div>
+														</div>
+													</div></li>
+
+													{% for link_id, link_value in value.stream_links.items %}
+														{% if forloop.counter is 1 %}
+															<li><hr class="dropdown-divider"></li>
+														{% endif %}
+														<li><div class="dropdown-item">
+															<div class="row">
+																<div class="col">
+																	<label for="{{auto_id}}_{{link_id}}" class="form-label">{{link_id}}</label>
+																</div>
+																<div class="col-2 gsettings-col">
+																	<div class="form-check form-switch">
+																		<input id="{{auto_id}}_{{link_id}}" class="form-check-input view-object" type="checkbox" checked>
+																	</div>
+																</div>
+															</div>
+														</div></li>
+													{% endfor %}
+												</ul>
+											</div>
 										</div>
 									</small>
 								</div>
@@ -241,6 +290,18 @@
 			}
 		});
 		$('.vsplitter').css({'background-color': 'darkgrey'});
+
+
+		/*$(function() {
+			var $containerlist = $('#containerlist');
+			$containerlist.bind('scroll', function() {
+				// "Disable" the horizontal scroll.
+				if ($containerlist.scrollLeft() !== 0) {
+					$containerlist.scrollLeft(0);
+				}
+			});
+
+		}); */
 		
 		// Создание объекта-указателя Entity на карте 
 		var iconStyle = new ol.style.Style({

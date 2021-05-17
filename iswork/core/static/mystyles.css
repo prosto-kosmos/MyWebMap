@@ -182,3 +182,16 @@
   padding: 5px;
   border-radius: 10px;
 }
+
+#containerlist {
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+}
+
+.dropdown-menu.show{
+  position:fixed !important;
+}
+
+.dropdown-item {
+  padding: 0rem 1rem;
+}
