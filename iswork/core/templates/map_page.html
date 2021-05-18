@@ -79,7 +79,7 @@
 															</div>
 															<div class="col-2 gsettings-col">
 																<div class="form-check form-switch">
-																	{% comment %} <span id="{{auto_id}}" class="badge bg-primary show">Show</span> {% endcomment %}
+																	<span id="{{auto_id}}" class="badge bg-primary show">Show</span>
 																</div>
 															</div>
 														</div>
@@ -96,7 +96,7 @@
 																</div>
 																<div class="col-2 gsettings-col">
 																	<div class="form-check form-switch">
-																		<input id="{{auto_id}}_{{link_id}}" class="form-check-input view-object" type="checkbox" checked>
+																		<input id="{{auto_id}}_{{link_id}}" class="form-check-input" type="checkbox">
 																	</div>
 																</div>
 															</div>
@@ -290,18 +290,6 @@
 			}
 		});
 		$('.vsplitter').css({'background-color': 'darkgrey'});
-
-
-		/*$(function() {
-			var $containerlist = $('#containerlist');
-			$containerlist.bind('scroll', function() {
-				// "Disable" the horizontal scroll.
-				if ($containerlist.scrollLeft() !== 0) {
-					$containerlist.scrollLeft(0);
-				}
-			});
-
-		}); */
 		
 		// Создание объекта-указателя Entity на карте 
 		var iconStyle = new ol.style.Style({
@@ -465,14 +453,28 @@
 			map.addOverlay(popup);
 		}
 
-		// 
+		// Отрисовка панели с видеопотоками
 		for(var [auto_id, value] of entityMap.entries()) {
-			for(var [stream_id, stream_link] of value.getStreamLinks.entries()) {
+			for(var [link_id, link_value] of value.getStreamLinks.entries()) {
 				$(document.getElementById('liststream')).append(`
-					<div id="${value.getID}" style="padding: 5px;" class="list-group-item list-group-item-action">
-						<h3 style="font-size:10px; margin: 0;">${value.getModel}</h3>
-						<h5 style="font-size:7px; margin: 0;">${stream_id}</h5>
-						<img src="${stream_link}" class="d-block w-100" alt="Нет видеопотоков">
+					<div id="stream_${auto_id}_${link_id}" style="padding: 5px; display:none;" class="list-group-item list-group-item-action">
+						
+						<div class="row">
+							<div class="col-7">
+								<h3 style="font-size:10px; margin: 0;">${value.getModel}</h3>
+								<h5 style="font-size:7px; margin: 0;">${link_id}</h5>
+							</div> 
+							<div class="col-5" style="padding-right: 12px;">
+								<div class="d-flex justify-content-end" style="padding-bottom: 3px;">
+									<span id="close_stream_${auto_id}_${link_id}" class="badge set-cursor settings-button ms-1">
+										<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+											<path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
+										</svg>
+									</span>
+								</div>
+							</div>
+						</div>
+						<img src="${link_value}" class="d-block w-100" alt="Нет видеопотоков">
 					</div>
 				`);
 			}
@@ -922,6 +924,30 @@
 				}
 			}
 		}, false);
+
+		// Обработка показа(скрытия) видеопотоков
+		for(var [auto_id, value] of entityMap.entries()) {
+			for(var [link_id, link_value] of value.getStreamLinks.entries()) {
+				$(`#${auto_id}_${link_id}`).on("change", function () {
+					if (this.checked){
+						$(`#stream_${this.id}`).css({"display":"block"});
+					}
+					else{
+						$(`#stream_${this.id}`).css({"display":"none"});
+					}
+				});
+			}
+		}
+
+		// Обработка скрытия видеопотоков на крестик
+		for(var [auto_id, value] of entityMap.entries()) {
+			for(var [link_id, link_value] of value.getStreamLinks.entries()) {
+				$(`#close_stream_${auto_id}_${link_id}`).on("click", function (auto_id, link_id) {
+					$(`#${this.id.slice(13)}`).click();//херня
+
+				});
+			}
+		}
 
 		// Считывание из куки видимость каждого Entity
 		for(var j = 0; j < view_switch.length; j++){
