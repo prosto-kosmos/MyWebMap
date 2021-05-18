@@ -195,3 +195,18 @@
 .dropdown-item {
   padding: 0rem 1rem;
 }
+
+#hintmap{
+  position: absolute;
+  z-index: 1;
+  bottom: 2px;
+  right: 2px;
+  background-color: white;
+  opacity: 0.8;
+  border-radius: 5px;
+}
+
+#hintmap p{
+  margin: 0;
+  padding: 5px;
+}
