@@ -25,6 +25,10 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 	<script type="text/javascript" src="{% static "jquery.cookie.js" %}"></script>
 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+
 	<script src="{% static "jquery.splitter.js" %}"></script>
     <link href="{% static "jquery.splitter.css" %}" rel="stylesheet"/>	
 	<link rel="stylesheet" href="{% static "mystyles.css" %}">
@@ -528,7 +532,7 @@
 			for(var [link_id, link_value] of streamLinks) {
 				if(!countCarousel){
 					streamLinksContent+= `
-						<div class="carousel-item active">
+						<div id="${link_id}" class="carousel-item active">
 							<div class="title-prd">
 								<p class="title-prt">${link_id}</p>
 							</div>
@@ -544,7 +548,7 @@
 				}
 				else{
 					streamLinksContent+= `
-						<div class="carousel-item">
+						<div id="${link_id}" class="carousel-item">
 							<div class="title-prd">
 								<p class="title-prt">${link_id}</p>
 							</div>
@@ -779,6 +783,22 @@
 					});
 					$(element).find('#span_close_min').on('click', function(e) {
 						$(element).popover('dispose');
+					});
+
+					// Контекстное окно над видеопотоком
+					$(function() {
+						$.contextMenu({
+							selector: `#carousel_${entityId} .carousel-item.active`, 
+							callback: function(key, options) {
+								var chId = entityId + '_' + $(`#carousel_${entityId} .carousel-item.active`).attr('id'); 
+								if ($(`#${chId}`).attr("checked") != 'checked'){
+									$(`#${chId}`).click();
+								}
+							},
+							items: {
+								"show": {name: "Показать в списке", icon: "edit"},
+							}
+						}); 
 					});
 
 					flagSetListener=true;
