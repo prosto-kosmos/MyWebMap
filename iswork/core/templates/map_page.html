@@ -295,7 +295,7 @@
 		var splitter = $('#widget').split({
 			orientation: 'vertical',
 			limit: 150,
-			position: '85%', 
+			position: $('#widget').width() - 150, 
 			onDrag: function(event) {
 				map.updateSize();
 			}
@@ -696,7 +696,7 @@
 						var settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'), {
 							keyboard: false
 						});
-						document.getElementById('settingsModalTitle').innerHTML = `Настройки ${entityMap.getModelById(entityId)}`;
+						document.getElementById('settingsModalTitle').innerHTML = `Параметры ${entityMap.getModelById(entityId)}`;
 						
 						var settingsContent = '';
 						for(var [param_id, param_value] of params) {
@@ -787,16 +787,27 @@
 
 					// Контекстное окно над видеопотоком
 					$(function() {
+						var x = 0;
 						$.contextMenu({
 							selector: `#carousel_${entityId} .carousel-item.active`, 
-							callback: function(key, options) {
+							build: function($triggerElement, e){
 								var chId = entityId + '_' + $(`#carousel_${entityId} .carousel-item.active`).attr('id'); 
-								if ($(`#${chId}`).attr("checked") != 'checked'){
-									$(`#${chId}`).click();
+								if (!document.getElementById(chId).checked){
+									var textShow = "Показать в списке";
+									var iconShow = 'add';
 								}
-							},
-							items: {
-								"show": {name: "Показать в списке", icon: "edit"},
+								else{
+									var textShow = "Удалить из списка";
+									var iconShow = 'delete';
+								}
+								return {
+									callback: function(key, options) {
+										$(`#${chId}`).click();
+									},
+									items: {
+										"show": {name: textShow, icon: iconShow},
+									}
+								};
 							}
 						}); 
 					});
