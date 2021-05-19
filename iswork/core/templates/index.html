@@ -52,20 +52,20 @@
                         {% if request.user.is_authenticated %}
                             <div class="nav-item">
                                 {% url 'map_page' as url_map_page %}
-                                <a class="nav-link btn-success mx-1" href="{{url_map_page}}">Карта</a>
+                                <a class="nav-link btn btn-outline-success mx-1" href="{{url_map_page}}">Карта</a>
                             </div>
                             <div class="nav-item">
                                 {% url 'logout_page' as url_logout_page %}
-                                <a class="nav-link btn-danger mx-2" href="{{url_logout_page}}">Выход</a>
+                                <a class="nav-link btn btn-outline-danger mx-2" href="{{url_logout_page}}">Выход</a>
                             </div>
                         {% else %}
                             <div class="nav-item">
                                 {% url 'login_page' as url_login_page %}
-                                <a class="nav-link btn-primary mx-1" href="{{url_login_page}}">Вход</a>
+                                <a class="nav-link btn btn-outline-primary mx-1" href="{{url_login_page}}">Вход</a>
                             </div>
                             <div class="nav-item">
                                 {% url 'register_page' as url_register_page %}
-                                <a class="nav-link btn-primary mx-2" href="{{url_register_page}}">Регистрация</a>
+                                <a class="nav-link btn btn-outline-primary mx-2" href="{{url_register_page}}">Регистрация</a>
                             </div>
                         {% endif %}
                     </div>
@@ -74,7 +74,7 @@
                 
 
             {% block content %}
-                <div style="position: fixed; height: 100%; width:100%; background: radial-gradient(#FEFFFF, #A7CECC);">
+                <div style="position: fixed; height: 100%; width:100%; background: #eee">
                 {% if request.user.is_authenticated %}
                     <div class="position-absolute top-50 start-50 translate-middle">
                         <p class="fs-3 fst-italic" style="text-align:center; margin-bottom:200px;">Вы вошли в систему. Начните работу с картой!</p>

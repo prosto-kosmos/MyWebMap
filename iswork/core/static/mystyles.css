@@ -41,19 +41,12 @@
   border:solid 1px #ccc;
 }
 
-.sidepanel-title {
-  width: 100%;
-  font-size: 3em;
-  color: #ffffff;
-  display: block;
-  text-align: center;
-}
-
 .list {
   display:block;
   background-color: #eee;
   padding:5px;
   box-shadow: inset 0 0px 0 #fff;
+  direction: ltr;
 }
 
 .search {
@@ -186,6 +179,7 @@
 #containerlist {
   overflow-y: scroll !important;
   overflow-x: hidden !important;
+  direction: rtl;
 }
 
 .dropdown-menu.show{
@@ -209,4 +203,12 @@
 #hintmap p{
   margin: 0;
   padding: 5px;
+}
+
+.modal.fade.show{
+  background-color: rgba(0,0,0, .5);
+}
+
+#liststream h3, h5{
+  margin: 0;
 }

@@ -10,7 +10,7 @@
 {% block top_nav_buttons_left %}
     <li class="nav-item px-3">
         {% url 'index_url' as index_page_url %}
-        <a class="nav-link btn-secondary" href="{{index_page_url}}">На главную</a>
+        <a class="nav-link btn btn-outline-secondary" href="{{index_page_url}}">На главную</a>
     </li>
 {% endblock %}
 
@@ -28,6 +28,9 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+	
+	<script src="{% static "ElementQueries.js" %}"></script>
+	<script src="{% static "ResizeSensor.js" %}"></script>
 
 	<script src="{% static "jquery.splitter.js" %}"></script>
     <link href="{% static "jquery.splitter.css" %}" rel="stylesheet"/>	
@@ -54,12 +57,12 @@
 						{% for auto_id, value in objects.items %}
 							<a href="#" id="{{auto_id}}" class="list-group-item list-group-item-action">
 								<div class="d-flex w-100 justify-content-between">
-									<div>
+									<div id="{{auto_id}}" class="show" title="Указатель на {{value.model}}">
 										<h5 class="mb-1 model">{{value.model}}</h5>
 										<p class="mb-1 number">Номер: <i>{{value.number}}</i></p>
 									</div>
 									<div class="btn-group dropend">
-										<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: -14px;">
+										<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: -12px;">
 											{% comment %}  {% endcomment %}
 										</button>
 										<ul class="dropdown-menu">
@@ -72,26 +75,6 @@
 														<div class="form-check form-switch">
 															<input id="{{auto_id}}" class="form-check-input view-object" type="checkbox" checked>
 														</div>
-													</div>
-												</div>
-											</div></li>
-											<li><hr class="dropdown-divider"></li>
-
-											<li><div class="dropdown-item">
-												<div class="row">
-													<div class="col">
-														<label for="{{auto_id}}" class="form-label">Сфокусироваться на объекте</label>
-													</div>
-													<div class="col-2 gsettings-col">
-														<button id="{{auto_id}}" type="button" class="btn btn-outline-primary btn-sm show">
-															<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bullseye" viewBox="0 0 16 16">
-															<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-															<path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10zm0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
-															<path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
-															<path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-															</svg>
-														</button>
-														{% comment %} <span id="{{auto_id}}" class="badge bg-primary show">Show</span> {% endcomment %}
 													</div>
 												</div>
 											</div></li>
@@ -301,6 +284,7 @@
 			}
 		});
 		$('.vsplitter').css({'background-color': 'darkgrey'});
+		$('.vsplitter').css({'z-index': '0'});
 		
 		// Создание объекта-указателя Entity на карте 
 		var iconStyle = new ol.style.Style({
@@ -471,13 +455,13 @@
 					<div id="stream_${auto_id}_${link_id}" style="padding: 5px; display:none;" class="list-group-item list-group-item-action">
 						
 						<div class="row">
-							<div class="col-7">
-								<h3 style="font-size:10px; margin: 0;">${value.getModel}</h3>
-								<h5 style="font-size:7px; margin: 0;">${link_id}</h5>
+							<div class="col-9">
+								<h3>${value.getModel}</h3>
+								<h5><i>${link_id}</i></h5>
 							</div> 
-							<div class="col-5" style="padding-right: 12px;">
+							<div class="col-3" style="padding-right: 12px;">
 								<div class="d-flex justify-content-end" style="padding-bottom: 3px;">
-									<span id="close_stream_${auto_id}_${link_id}" class="badge set-cursor settings-button ms-1">
+									<span id="close_stream_${auto_id}_${link_id}" class="badge set-cursor settings-button stream-close">
 										<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
 											<path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
 										</svg>
@@ -1039,6 +1023,29 @@
 				}
 			});
 		}
+
+		/*new ResizeSensor(jQuery('.streampanel'), function(){ 
+			console.log('content dimension changed');
+			alert($('#objectstreamlist').width());
+		});*/
+
+		var streamList = $('#objectstreamlist');
+		var stopResize = 220; //px
+		var sensor = new ResizeSensor(streamList, function(){
+			if(streamList.width()<stopResize){
+				$('#objectstreamlist h3').css({'font-size':streamList.width()/100*7});
+				$('#objectstreamlist h5').css({'font-size':streamList.width()/100*5});
+				$('.stream-close').css({'padding-block':streamList.width()/100*1 +'px'});
+				$('.stream-close').css({'padding-inline':streamList.width()/100*2 +'px'});
+			}
+			else{
+				$('#objectstreamlist h3').css({'font-size':stopResize/100*7});
+				$('#objectstreamlist h5').css({'font-size':stopResize/100*5});
+				$('.stream-close').css({'padding-block':'5px'});
+				$('.stream-close').css({'padding-inline':'10px'});
+			}
+		});
+
 
     </script>
 	
