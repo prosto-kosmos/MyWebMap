@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
 	<script src="https://unpkg.com/elm-pep"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 	<script type="text/javascript" src="{% static "jquery.cookie.js" %}"></script>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
@@ -105,7 +104,7 @@
 				</div>
 				<div class="container">
 					<div class="input-group">
-						<input class="search" placeholder="Поиск"/>
+						<input id="search" class="search" placeholder="Поиск" onkeyup="searchFunction()"/>
 						<button type="button" class="btn btn-outline-secondary btn-global-settings" data-bs-toggle="modal" data-bs-target="#globalSettingsModal">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
 								<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
@@ -261,10 +260,22 @@
 		});
 
 		// Функционал поиска Entity в списке
-		var options = {
-			valueNames: ['model', 'number']
-		};
-		var userList = new List('objectslist', options);
+		function searchFunction() {
+			var input = document.getElementById("search");
+			var filter = input.value.toUpperCase();
+			var ul = document.getElementById("list");
+			var a = ul.getElementsByTagName("a"); 
+
+			// Перебирайте все элементы списка и скрывайте те, которые не соответствуют поисковому запросу
+			for (i = 0; i < a.length; i++) {
+				var context = a[i].getElementsByTagName("h5")[0];
+				if (context.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					a[i].style.display = "";
+				} else {
+					a[i].style.display = "none";
+				}
+			}
+		}
 
 		// Функционал сортировки в списке
 		$(function() {
@@ -982,7 +993,6 @@
 			for(var stream of value.getStreamLinks) {
 				$(`#close_stream_${entity_id}_${stream.get('stream_id')}`).on("click", function (entity_id) {
 					$(`#${this.id.slice(13)}`).click();//херня
-
 				});
 			}
 		}

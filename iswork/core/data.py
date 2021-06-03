@@ -80,64 +80,145 @@ def getStartObjests():
                 'position_n':'6990748.408997443',
                 'position_e':'4016499.440906363',
             },
+            {
+                'entity_id':'auto3',
+                'number':'k918cc57',
+                'model':'Nissan Juke',
+                'params':[
+                    {
+                        'params_id':'speed',
+                        'params_alias':'Скорость',
+                        'params_value':'45км/ч',
+                    },
+                    {
+                        'params_id':'rpm',
+                        'params_alias':'Обороты',
+                        'params_value':'1234',
+                    },
+                    {
+                        'params_id':'temp',
+                        'params_alias':'Температура',
+                        'params_value':'14℃',
+                    },
+                ],
+                'stream_links':[
+                    {
+                        'stream_id':'camera1',
+                        'stream_alias':'Вид спереди',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                    },
+                    {
+                        'stream_id':'camera2',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                    },
+                    {
+                        'stream_id':'camera3',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                    },
+                    {
+                        'stream_id':'camera4',
+                        'stream_alias':'Вид сверху',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+                    },
+                ],
+                'position_n':'6990148.408997443',
+                'position_e':'4016299.440906363',
+            },
+            {
+                'entity_id':'auto4',
+                'number':'k899ae57',
+                'model':'Opel Astra',
+                'params':[
+                    {
+                        'params_id':'speed',
+                        'params_alias':'Скорость',
+                        'params_value':'45км/ч',
+                    },
+                    {
+                        'params_id':'rpm',
+                        'params_alias':'Обороты',
+                        'params_value':'1234',
+                    },
+                    {
+                        'params_id':'temp',
+                        'params_alias':'Температура',
+                        'params_value':'14℃',
+                    },
+                ],
+                'stream_links':[
+                    {
+                        'stream_id':'camera1',
+                        'stream_alias':'Вид спереди',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                    },
+                    {
+                        'stream_id':'camera2',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                    },
+                    {
+                        'stream_id':'camera3',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                    },
+                    {
+                        'stream_id':'camera4',
+                        'stream_alias':'Вид сверху',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+                    },
+                ],
+                'position_n':'6990348.408997443',
+                'position_e':'4015499.440906363',
+            },
+            {
+                'entity_id':'auto5',
+                'number':'e817aa99',
+                'model':'Chevrolet Cruze',
+                'params':[
+                    {
+                        'params_id':'speed',
+                        'params_alias':'Скорость',
+                        'params_value':'45км/ч',
+                    },
+                    {
+                        'params_id':'rpm',
+                        'params_alias':'Обороты',
+                        'params_value':'1234',
+                    },
+                    {
+                        'params_id':'temp',
+                        'params_alias':'Температура',
+                        'params_value':'14℃',
+                    },
+                ],
+                'stream_links':[
+                    {
+                        'stream_id':'camera1',
+                        'stream_alias':'Вид спереди',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                    },
+                    {
+                        'stream_id':'camera2',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                    },
+                    {
+                        'stream_id':'camera3',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                    },
+                    {
+                        'stream_id':'camera4',
+                        'stream_alias':'Вид сверху',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+                    },
+                ],
+                'position_n':'6990648.408997443',
+                'position_e':'4016599.440906363',
+            },
         ]
-        # 'auto3':
-        # {
-        #     'enabled':'False',
-        #     'number':'k918cc57',
-        #     'model':'Nissan Juke',
-        #     'params':{
-        #         'Скорость':'51км/ч',
-        #         'Обороты':'3012',
-        #         'Температура':'97℃',
-        #     },
-        #     'stream_links':{
-        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-        #     },
-        #     'position_n':'6960655.308997443',
-        #     'position_e':'4035489.640906363',
-        # },
-        # 'auto4':
-        # {
-        #     'enabled':'True',
-        #     'number':'k899ae57',
-        #     'model':'Opel Astra',
-        #     'params':{
-        #         'Скорость':'45км/ч',
-        #         'Обороты':'123',
-        #         'Температура':'54℃',
-        #         'Заслонка':'96%',
-        #     },
-        #     'stream_links':{
-        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-        #         'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-        #     },
-        #     'position_n':'6955499.308997443',
-        #     'position_e':'4016601.840906363',
-        # },
-        # 'auto5':
-        # {
-        #     'enabled':'False',
-        #     'number':'e817aa99',
-        #     'model':'Chevrolet Cruze',
-        #     'params':{
-        #         'Скорость':'33км/ч',
-        #         'Обороты':'4810',
-        #         'Температура':'98℃',
-        #         'Заслонка':'95%',
-        #     },
-        #     'stream_links':{
-        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-        #         'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-        #     },
-        #     'position_n':'6917515.708997443',
-        #     'position_e':'4076666.640906363',
-        # },
         # 'auto6':
         # {
         #     'enabled':'True',
