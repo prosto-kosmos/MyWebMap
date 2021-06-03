@@ -2,275 +2,308 @@ import json
 
 def getStartObjests():
     objs = {
-        'auto1': 
-        {
-            'enabled':'True',
-            'number':'a777aa99',
-            'model':'Mercedes Benz',
-            'params':{
-                'Скорость':'30км/ч',
-                'Обороты':'3091',
-                'Температура':'30℃',
+        'entity_list': [
+            {
+                'entity_id':'auto1',
+                'number':'a777aa99',
+                'model':'Mercedes Benz',
+                'params':[
+                    {
+                        'params_id':'speed',
+                        'params_alias':'Скорость',
+                        'params_value':'30км/ч',
+                    },
+                    {
+                        'params_id':'rpm',
+                        'params_alias':'Обороты',
+                        'params_value':'3091',
+                    },
+                    {
+                        'params_id':'temp',
+                        'params_alias':'Температура',
+                        'params_value':'30℃',
+                    },
+                ],
+                'stream_links':[
+                    {
+                        'stream_id':'camera1',
+                        'stream_alias':'Вид спереди',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                    },
+                    {
+                        'stream_id':'camera2',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                    },
+                    {
+                        'stream_id':'camera3',
+                        'stream_alias':'Вид сзади',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+                    },
+                ],
+                'position_n':'6977760.708997443',
+                'position_e':'4016570.740906363',
             },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-                'Camera5':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera6':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera7':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera8':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+            {
+                'entity_id':'auto2',
+                'number':'e758op36',
+                'model':'Volkswagen Jetta',
+                'params':[
+                    {
+                        'params_id':'speed',
+                        'params_alias':'Скорость',
+                        'params_value':'55км/ч',
+                    },
+                    {
+                        'params_id':'rpm',
+                        'params_alias':'Обороты',
+                        'params_value':'6892',
+                    },
+                    {
+                        'params_id':'temp',
+                        'params_alias':'Температура',
+                        'params_value':'94℃',
+                    },
+                ],
+                'stream_links':[
+                    {
+                        'stream_id':'camera1',
+                        'stream_alias':'Вид спереди',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+                    },
+                    {
+                        'stream_id':'camera2',
+                        'stream_alias':'Вид сбоку',
+                        'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+                    },
+                ],
+                'position_n':'6990748.408997443',
+                'position_e':'4016499.440906363',
             },
-            'position_n':'6977760.708997443',
-            'position_e':'4016570.740906363',
-        },
-        'auto2':
-        {
-            'enabled':'True',
-            'number':'e758op36',
-            'model':'Volkswagen Jetta',
-            'params':{
-                'Скорость':'55км/ч',
-                'Обороты':'2098',
-                'Температура':'90℃',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-                'Camera5':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera6':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera7':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera8':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-            },
-            'position_n':'6990748.408997443',
-            'position_e':'4016499.440906363',
-        },
-        'auto3':
-        {
-            'enabled':'False',
-            'number':'k918cc57',
-            'model':'Nissan Juke',
-            'params':{
-                'Скорость':'51км/ч',
-                'Обороты':'3012',
-                'Температура':'97℃',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-            },
-            'position_n':'6960655.308997443',
-            'position_e':'4035489.640906363',
-        },
-        'auto4':
-        {
-            'enabled':'True',
-            'number':'k899ae57',
-            'model':'Opel Astra',
-            'params':{
-                'Скорость':'45км/ч',
-                'Обороты':'123',
-                'Температура':'54℃',
-                'Заслонка':'96%',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-            },
-            'position_n':'6955499.308997443',
-            'position_e':'4016601.840906363',
-        },
-        'auto5':
-        {
-            'enabled':'False',
-            'number':'e817aa99',
-            'model':'Chevrolet Cruze',
-            'params':{
-                'Скорость':'33км/ч',
-                'Обороты':'4810',
-                'Температура':'98℃',
-                'Заслонка':'95%',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-            },
-            'position_n':'6917515.708997443',
-            'position_e':'4076666.640906363',
-        },
-        'auto6':
-        {
-            'enabled':'True',
-            'number':'c832mm36',
-            'model':'BMW X5',
-            'params':{
-                'Скорость':'90км/ч',
-                'Обороты':'1098',
-                'Заслонка':'97%',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-            },
-            'position_n':'6907781.308997443',
-            'position_e':'4056477.640906363',
-        },
-        'auto7':
-        {
-            'enabled':'True',
-            'number':'e239ea57',
-            'model':'Lada Granta',
-            'params':{
-                'Скорость':'94км/ч',
-                'Обороты':'2001',
-                'Заслонка':'95%',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-            },
-            'position_n':'6928067.298997443',
-            'position_e':'4006345.940906363',
-        },
-        'auto8':
-        {
-            'enabled':'True',
-            'number':'a221ak36',
-            'model':'Audi R8',
-            'params':{
-                'Скорость':'104км/ч',
-                'Обороты':'2701',
-                'Заслонка':'93%',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-            },
-            'position_n':'6957810.398997443',
-            'position_e':'4046659.540906363',
-        },
-        'auto9':
-        {
-            'enabled':'True',
-            'number':'o545ko55',
-            'model':'Mitsubishi Lancer',
-            'params':{
-                'Скорость':'123км/ч',
-                'Обороты':'5432',
-                'Заслонка':'90%',
-            },
-            'stream_links':{
-            },
-            'position_n':'6958670.398997443',
-            'position_e':'4048659.540906363',
-        },
-        'auto10':
-        {
-            'enabled':'True',
-            'number':'k919ao57',
-            'model':'Ford Focus',
-            'params':{
-                'Скорость':'174км/ч',
-                'Обороты':'3009',
-                'Заслонка':'89%',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-                'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
-                'Camera5':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera6':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera7':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-            },
-            'position_n':'6957810.398997443',
-            'position_e':'4040659.540906363',
-        },
-        'auto11':
-        {
-            'enabled':'True',
-            'number':'c654pc57',
-            'model':'Cadillac Escalade',
-            'params':{
-                'Скорость':'187км/ч',
-                'Обороты':'4093',
-                'Заслонка':'98%',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-            },
-            'position_n':'6943810.398997443',
-            'position_e':'4043659.540906363',
-        },
-        'auto12':
-        {
-            'enabled':'False',
-            'number':'p112pc57',
-            'model':'Jeep Compass',
-            'params':{
-                'Скорость':'20км/ч',
-                'Обороты':'1987',
-            },
-            'stream_links':{
-            },
-            'position_n':'6945810.398997443',
-            'position_e':'4053987.540906363',
-        },
-        'auto13':
-        {
-            'enabled':'False',
-            'number':'o056cp777',
-            'model':'Hummer EV',
-            'params':{
-                'Скорость':'98км/ч',
-                'Обороты':'1098',
-            },
-            'stream_links':{
-            },
-            'position_n':'6950810.398997443',
-            'position_e':'4036659.540906363',
-        },
-        'auto14':
-        {
-            'enabled':'True',
-            'number':'o002pe777',
-            'model':'LADA XRay',
-            'params':{
-                'Скорость':'100км/ч',
-                'Обороты':'3019',
-            },
-            'stream_links':{
-                'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
-                'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
-                'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
-            },
-            'position_n':'6933810.398997443',
-            'position_e':'4076987.540906363',
-        },
-        'auto15':
-        {
-            'enabled':'True',
-            'number':'e821ok67',
-            'model':' LADA Niva',
-            'params':{
-                'Скорость':'89км/ч',
-                'Обороты':'2376',
-            },
-            'stream_links':{
-            },
-            'position_n':'6945810.398997443',
-            'position_e':'4026659.540906363',
-        },
+        ]
+        # 'auto3':
+        # {
+        #     'enabled':'False',
+        #     'number':'k918cc57',
+        #     'model':'Nissan Juke',
+        #     'params':{
+        #         'Скорость':'51км/ч',
+        #         'Обороты':'3012',
+        #         'Температура':'97℃',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #     },
+        #     'position_n':'6960655.308997443',
+        #     'position_e':'4035489.640906363',
+        # },
+        # 'auto4':
+        # {
+        #     'enabled':'True',
+        #     'number':'k899ae57',
+        #     'model':'Opel Astra',
+        #     'params':{
+        #         'Скорость':'45км/ч',
+        #         'Обороты':'123',
+        #         'Температура':'54℃',
+        #         'Заслонка':'96%',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+        #         'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+        #     },
+        #     'position_n':'6955499.308997443',
+        #     'position_e':'4016601.840906363',
+        # },
+        # 'auto5':
+        # {
+        #     'enabled':'False',
+        #     'number':'e817aa99',
+        #     'model':'Chevrolet Cruze',
+        #     'params':{
+        #         'Скорость':'33км/ч',
+        #         'Обороты':'4810',
+        #         'Температура':'98℃',
+        #         'Заслонка':'95%',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+        #         'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+        #     },
+        #     'position_n':'6917515.708997443',
+        #     'position_e':'4076666.640906363',
+        # },
+        # 'auto6':
+        # {
+        #     'enabled':'True',
+        #     'number':'c832mm36',
+        #     'model':'BMW X5',
+        #     'params':{
+        #         'Скорость':'90км/ч',
+        #         'Обороты':'1098',
+        #         'Заслонка':'97%',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #     },
+        #     'position_n':'6907781.308997443',
+        #     'position_e':'4056477.640906363',
+        # },
+        # 'auto7':
+        # {
+        #     'enabled':'True',
+        #     'number':'e239ea57',
+        #     'model':'Lada Granta',
+        #     'params':{
+        #         'Скорость':'94км/ч',
+        #         'Обороты':'2001',
+        #         'Заслонка':'95%',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+        #         'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+        #     },
+        #     'position_n':'6928067.298997443',
+        #     'position_e':'4006345.940906363',
+        # },
+        # 'auto8':
+        # {
+        #     'enabled':'True',
+        #     'number':'a221ak36',
+        #     'model':'Audi R8',
+        #     'params':{
+        #         'Скорость':'104км/ч',
+        #         'Обороты':'2701',
+        #         'Заслонка':'93%',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+        #     },
+        #     'position_n':'6957810.398997443',
+        #     'position_e':'4046659.540906363',
+        # },
+        # 'auto9':
+        # {
+        #     'enabled':'True',
+        #     'number':'o545ko55',
+        #     'model':'Mitsubishi Lancer',
+        #     'params':{
+        #         'Скорость':'123км/ч',
+        #         'Обороты':'5432',
+        #         'Заслонка':'90%',
+        #     },
+        #     'stream_links':{
+        #     },
+        #     'position_n':'6958670.398997443',
+        #     'position_e':'4048659.540906363',
+        # },
+        # 'auto10':
+        # {
+        #     'enabled':'True',
+        #     'number':'k919ao57',
+        #     'model':'Ford Focus',
+        #     'params':{
+        #         'Скорость':'174км/ч',
+        #         'Обороты':'3009',
+        #         'Заслонка':'89%',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+        #         'Camera4':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
+        #         'Camera5':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera6':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #         'Camera7':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+        #     },
+        #     'position_n':'6957810.398997443',
+        #     'position_e':'4040659.540906363',
+        # },
+        # 'auto11':
+        # {
+        #     'enabled':'True',
+        #     'number':'c654pc57',
+        #     'model':'Cadillac Escalade',
+        #     'params':{
+        #         'Скорость':'187км/ч',
+        #         'Обороты':'4093',
+        #         'Заслонка':'98%',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #     },
+        #     'position_n':'6943810.398997443',
+        #     'position_e':'4043659.540906363',
+        # },
+        # 'auto12':
+        # {
+        #     'enabled':'False',
+        #     'number':'p112pc57',
+        #     'model':'Jeep Compass',
+        #     'params':{
+        #         'Скорость':'20км/ч',
+        #         'Обороты':'1987',
+        #     },
+        #     'stream_links':{
+        #     },
+        #     'position_n':'6945810.398997443',
+        #     'position_e':'4053987.540906363',
+        # },
+        # 'auto13':
+        # {
+        #     'enabled':'False',
+        #     'number':'o056cp777',
+        #     'model':'Hummer EV',
+        #     'params':{
+        #         'Скорость':'98км/ч',
+        #         'Обороты':'1098',
+        #     },
+        #     'stream_links':{
+        #     },
+        #     'position_n':'6950810.398997443',
+        #     'position_e':'4036659.540906363',
+        # },
+        # 'auto14':
+        # {
+        #     'enabled':'True',
+        #     'number':'o002pe777',
+        #     'model':'LADA XRay',
+        #     'params':{
+        #         'Скорость':'100км/ч',
+        #         'Обороты':'3019',
+        #     },
+        #     'stream_links':{
+        #         'Camera1':'https://obninsksite.ru/assets/theme/images/blog/slider/1.jpg',
+        #         'Camera2':'https://obninsksite.ru/assets/theme/images/blog/slider/2.jpg',
+        #         'Camera3':'https://obninsksite.ru/assets/theme/images/blog/slider/3.jpg',
+        #     },
+        #     'position_n':'6933810.398997443',
+        #     'position_e':'4076987.540906363',
+        # },
+        # 'auto15':
+        # {
+        #     'enabled':'True',
+        #     'number':'e821ok67',
+        #     'model':' LADA Niva',
+        #     'params':{
+        #         'Скорость':'89км/ч',
+        #         'Обороты':'2376',
+        #     },
+        #     'stream_links':{
+        #     },
+        #     'position_n':'6945810.398997443',
+        #     'position_e':'4026659.540906363',
+        # },
     }
     return objs
 

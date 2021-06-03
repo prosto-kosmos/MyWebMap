@@ -42,9 +42,9 @@
 	<div id="fullscreen" class="fullscreen">
     	
 		<!-- Разметка окон с параметрами и превью -->
-		{% for auto_id, value in objects.items %}
+		{% for entity in objects.entity_list %}
 			<div style="display: none;">
-				<div id="popup_{{auto_id}}" style="position:absolute;">
+				<div id="popup_{{entity.entity_id}}" style="position:absolute;">
 				</div>
 			</div>
 		{% endfor %}
@@ -54,12 +54,12 @@
 			<div id="objectslist" class="list-group" style="height:100%; width: 300px;">
 				<div id="containerlist" class="p-1" style="height:100%;">
 					<ul id="list" class="list">
-						{% for auto_id, value in objects.items %}
-							<a href="#" id="{{auto_id}}" class="list-group-item list-group-item-action">
+						{% for entity in objects.entity_list %}
+							<a href="#" id="{{entity.entity_id}}" class="list-group-item list-group-item-action">
 								<div class="d-flex w-100 justify-content-between">
-									<div id="{{auto_id}}" class="show" title="Указатель на {{value.model}}">
-										<h5 class="mb-1 model">{{value.model}}</h5>
-										<p class="mb-1 number">Номер: <i>{{value.number}}</i></p>
+									<div id="{{entity.entity_id}}" class="show" title="Указатель на {{entity.model}}">
+										<h5 class="mb-1 model">{{entity.model}}</h5>
+										<p class="mb-1 number">Номер: <i>{{entity.number}}</i></p>
 									</div>
 									<div class="btn-group dropend">
 										<button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: -12px;">
@@ -69,28 +69,28 @@
 											<li><div class="dropdown-item">
 												<div class="row">
 													<div class="col">
-														<label for="{{auto_id}}" class="form-label">Показать (скрыть) указатель</label>
+														<label for="{{entity.entity_id}}" class="form-label">Показать (скрыть) указатель</label>
 													</div>
 													<div class="col-2 gsettings-col">
 														<div class="form-check form-switch">
-															<input id="{{auto_id}}" class="form-check-input view-object" type="checkbox" checked>
+															<input id="{{entity.entity_id}}" class="form-check-input view-object" type="checkbox" checked>
 														</div>
 													</div>
 												</div>
 											</div></li>
 
-											{% for link_id, link_value in value.stream_links.items %}
+											{% for stream in entity.stream_links %}
 												{% if forloop.counter is 1 %}
 													<li><hr class="dropdown-divider"></li>
 												{% endif %}
 												<li><div class="dropdown-item">
 													<div class="row">
 														<div class="col">
-															<label for="{{auto_id}}_{{link_id}}" class="form-label">{{link_id}}</label>
+															<label for="{{entity.entity_id}}_{{stream.stream_id}}" class="form-label">{{stream.stream_alias}}</label>
 														</div>
 														<div class="col-2 gsettings-col">
 															<div class="form-check form-switch">
-																<input id="{{auto_id}}_{{link_id}}" class="form-check-input" type="checkbox">
+																<input id="{{entity.entity_id}}_{{stream.stream_id}}" class="form-check-input" type="checkbox">
 															</div>
 														</div>
 													</div>
@@ -137,7 +137,7 @@
 		</div>
 
 		<!-- Модальное окно с подробным отображением видеопотока -->
-		<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalTitle" aria-hidden="true">
+		<!-- <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalTitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
 				<div class="modal-header">
@@ -152,7 +152,7 @@
 				</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 		<!-- Модальное окно с настройками отбражаемых объектов -->
 		<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalTitle" aria-hidden="true">
@@ -300,37 +300,44 @@
 		entityMap = new EntityMap();
 
 		// Парсинг полученных Entity
-		{% for auto_id, value in objects.items %}
+		{% for entity in objects.entity_list %}
 			(function(entityMap){
-				var entity = new Entity('{{auto_id}}');
-				entity.setEnabled = '{{value.enabled}}';
-				entity.setNumber = '{{value.number}}';
-				entity.setModel = '{{value.model}}';
-				entity.setPositionN = '{{value.position_n}}';
-				entity.setPositionE = '{{value.position_e}}';
+				var entityOBJ = new Entity('{{entity.entity_id}}');
+				entityOBJ.setNumber = '{{entity.number}}';
+				entityOBJ.setModel = '{{entity.model}}';
+				entityOBJ.setPositionN = '{{entity.position_n}}';
+				entityOBJ.setPositionE = '{{entity.position_e}}';
 
-				params = new Map();
-				{% for param_id, param_value in value.params.items %}
-					params.set('{{param_id}}','{{param_value}}');
+				var params = new Array();
+				{% for param in entity.params %}
+					var paramMap = new Map();
+					paramMap.set('params_id', '{{param.params_id}}');
+					paramMap.set('params_alias', '{{param.params_alias}}');
+					paramMap.set('params_value', '{{param.params_value}}');
+					params.push(paramMap);
 				{% endfor %}
-				entity.setParams = params;
+				entityOBJ.setParams = params;
 
-				streamLinks = new Map();
-				{% for link_id, link_value in value.stream_links.items %}
-					streamLinks.set('{{link_id}}','{{link_value}}');
+				streamLinks = new Array();
+				{% for stream in entity.stream_links %}
+					var streamMap = new Map();
+					streamMap.set('stream_id', '{{stream.stream_id}}');
+					streamMap.set('stream_alias', '{{stream.stream_alias}}');
+					streamMap.set('stream_value', '{{stream.stream_value}}');
+					streamLinks.push(streamMap);
 				{% endfor %}
-				entity.setStreamLinks = streamLinks;
+				entityOBJ.setStreamLinks = streamLinks;
 				
 				var iconFeature = new ol.Feature({
-					geometry: new ol.geom.Point(['{{value.position_e}}', '{{value.position_n}}']),
-					name: '{{auto_id}}',
+					geometry: new ol.geom.Point(['{{entity.position_e}}', '{{entity.position_n}}']),
+					name: '{{entity.entity_id}}',
 					population: 4000,
 					rainfall: 500,
 				});
 				iconFeature.setStyle(iconStyle);
-				entity.setIconFeature = iconFeature;
+				entityOBJ.setIconFeature = iconFeature;
 
-				entityMap.set('{{auto_id}}', entity);
+				entityMap.set('{{entity.entity_id}}', entityOBJ);
 			})(entityMap);
 		{% endfor %}
 
@@ -437,9 +444,9 @@
 		});
 
 		// Заполнение контейнера Entity объектами окон параметров и превью 
-		for(var [auto_id, value] of entityMap.entries()) {
+		for(var [entity_id, value] of entityMap.entries()) {
 			var popup = new ol.Overlay({
-				element: document.getElementById('popup_' + auto_id),
+				element: document.getElementById('popup_' + entity_id),
 				positioning: 'bottom-center',
 				stopEvent: false,
 				offset: [0, -15],
@@ -449,19 +456,19 @@
 		}
 
 		// Отрисовка панели с видеопотоками
-		for(var [auto_id, value] of entityMap.entries()) {
-			for(var [link_id, link_value] of value.getStreamLinks.entries()) {
+		for(var [entity_id, value] of entityMap.entries()) {
+			for(var stream of value.getStreamLinks) {
 				$(document.getElementById('liststream')).append(`
-					<div id="stream_${auto_id}_${link_id}" style="padding: 5px; display:none;" class="list-group-item list-group-item-action">
+					<div id="stream_${entity_id}_${stream.get('stream_id')}" style="padding: 5px; display:none;" class="list-group-item list-group-item-action">
 						
 						<div class="row">
 							<div class="col-9">
 								<h3>${value.getModel}</h3>
-								<h5><i>${link_id}</i></h5>
+								<h5><i>${stream.get('stream_alias')}</i></h5>
 							</div> 
 							<div class="col-3" style="padding-right: 12px;">
 								<div class="d-flex justify-content-end" style="padding-bottom: 3px;">
-									<span id="close_stream_${auto_id}_${link_id}" class="badge set-cursor settings-button stream-close">
+									<span id="close_stream_${entity_id}_${stream.get('stream_id')}" class="badge set-cursor settings-button stream-close">
 										<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
 											<path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
 										</svg>
@@ -469,7 +476,7 @@
 								</div>
 							</div>
 						</div>
-						<img src="${link_value}" class="d-block w-100" alt="Нет видеопотоков">
+						<img src="${stream.get('stream_value')}" class="d-block w-100" alt="Нет видеопотоков">
 					</div>
 				`);
 			}
@@ -491,8 +498,8 @@
 			popup.setPosition(coordinates);
 			
 			var flagSetListener = false; // флаг нужен чтобы избежать создание лишних обработчиков
-			var params = entityMap.get(entityId).getParams; // map параметров entity
-			var streamLinks = entityMap.get(entityId).getStreamLinks; // map видеопотоков entity
+			var params = entityMap.get(entityId).getParams; // array параметров entity
+			var streamLinks = entityMap.get(entityId).getStreamLinks; // array видеопотоков entity
 			var paramsContent = '';
 			var streamLinksContent = '';
 			var streamLinksIndicators = '';
@@ -502,25 +509,25 @@
 			// Данные настроек (показать(скрыть)) параметр хранятся в куки
 			// Ключ куки: id переключателя параметра в настройках
 			// Значение: "checked" или если не определен - показать, "" - скрыть 
-			for(var [param_id, param_value] of params) {
-				if($.cookie(`sw_${param_id}_${entityId}`) != ''){
-					paramsContent+= `<p id="p_sw_${param_id}_${entityId}" class="m-0">${param_id}: ${param_value}</p>`;
+			for(var param of params) {
+				if($.cookie(`sw_${param.get('params_id')}_${entityId}`) != ''){
+					paramsContent+= `<p id="p_sw_${param.get('params_id')}_${entityId}" class="m-0">${param.get('params_alias')}: ${param.get('params_value')}</p>`;
 				}	
 				else{
-					paramsContent+= `<p id="p_sw_${param_id}_${entityId}" class="m-0" style="display:none;">${param_id}: ${param_value}</p>`;
+					paramsContent+= `<p id="p_sw_${param.get('params_id')}_${entityId}" class="m-0" style="display:none;">${param.get('params_alias')}: ${param.get('params_value')}</p>`;
 				}				
 			}
 			
 			// Формирование блока отображения видеопотока
 			var countCarousel = 0;
-			for(var [link_id, link_value] of streamLinks) {
+			for(var stream of streamLinks) {
 				if(!countCarousel){
 					streamLinksContent+= `
-						<div id="${link_id}" class="carousel-item active">
+						<div id="${stream.get('stream_id')}" class="carousel-item active">
 							<div class="title-prd">
-								<p class="title-prt">${link_id}</p>
+								<p class="title-prt">${stream.get('stream_alias')}</p>
 							</div>
-							<img src=${link_value} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "videostream.png" %}'">
+							<img src=${stream.get('stream_value')} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "videostream.png" %}'">
 						</div>
 					`;
 					streamLinksIndicators+=`
@@ -532,11 +539,11 @@
 				}
 				else{
 					streamLinksContent+= `
-						<div id="${link_id}" class="carousel-item">
+						<div id="${stream.get('stream_id')}" class="carousel-item">
 							<div class="title-prd">
-								<p class="title-prt">${link_id}</p>
+								<p class="title-prt">${stream.get('stream_alias')}</p>
 							</div>
-							<img src=${link_value} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "videostream.png" %}'">
+							<img src=${stream.get('stream_value')} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "videostream.png" %}'">
 						</div>
 					`;
 					streamLinksIndicators+=`
@@ -683,20 +690,20 @@
 						document.getElementById('settingsModalTitle').innerHTML = `Параметры ${entityMap.getModelById(entityId)}`;
 						
 						var settingsContent = '';
-						for(var [param_id, param_value] of params) {
+						for(var param of params) {
 							var isCheck = 'checked';
-							if($.cookie(`sw_${param_id}_${entityId}`) != undefined){
-								isCheck = $.cookie(`sw_${param_id}_${entityId}`);
+							if($.cookie(`sw_${param.get('params_id')}_${entityId}`) != undefined){
+								isCheck = $.cookie(`sw_${param.get('params_id')}_${entityId}`);
 							}
 							
 							settingsContent+= `
 								<div class="row">
 									<div class="col">
-										<label for="sw_${param_id}_${entityId}" class="form-label">${param_id}</label>
+										<label for="sw_${param.get('params_id')}_${entityId}" class="form-label">${param.get('params_alias')}</label>
 									</div>
 									<div class="col-2 gsettings-col">
 										<div class="form-check form-switch">
-											<input id="sw_${param_id}_${entityId}" class="form-check-input" type="checkbox" ${isCheck}>
+											<input id="sw_${param.get('params_id')}_${entityId}" class="form-check-input" type="checkbox" ${isCheck}>
 										</div>
 									</div>
 								</div>
@@ -704,8 +711,8 @@
 						}
 						document.getElementById('settingsModalContent').innerHTML = settingsContent;
 						
-						for(var [param_id, param_value] of params) {
-							var swParam = document.getElementById(`sw_${param_id}_${entityId}`);
+						for(var param of params) {
+							var swParam = document.getElementById(`sw_${param.get('params_id')}_${entityId}`);
 							swParam.addEventListener("change", function () {
 								if (this.checked){
 									$.cookie(`${this.id}`, 'checked');
@@ -957,9 +964,9 @@
 		}, false);
 
 		// Обработка показа(скрытия) видеопотоков
-		for(var [auto_id, value] of entityMap.entries()) {
-			for(var [link_id, link_value] of value.getStreamLinks.entries()) {
-				$(`#${auto_id}_${link_id}`).on("change", function () {
+		for(var [entity_id, value] of entityMap.entries()) {
+			for(var stream of value.getStreamLinks) {
+				$(`#${entity_id}_${stream.get('stream_id')}`).on("change", function () {
 					if (this.checked){
 						$(`#stream_${this.id}`).css({"display":"block"});
 					}
@@ -971,9 +978,9 @@
 		}
 
 		// Обработка скрытия видеопотоков на крестик
-		for(var [auto_id, value] of entityMap.entries()) {
-			for(var [link_id, link_value] of value.getStreamLinks.entries()) {
-				$(`#close_stream_${auto_id}_${link_id}`).on("click", function (auto_id, link_id) {
+		for(var [entity_id, value] of entityMap.entries()) {
+			for(var stream of value.getStreamLinks) {
+				$(`#close_stream_${entity_id}_${stream.get('stream_id')}`).on("click", function (entity_id) {
 					$(`#${this.id.slice(13)}`).click();//херня
 
 				});
@@ -1065,7 +1072,7 @@
 				}
 			});*/
 			
-			for(var i = 1; i < 5; i++){
+			for(var i = 1; i < 3; i++){
 				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
 				var px = parseFloat(coordinates[0])+5.0;
 				var py = parseFloat(coordinates[1])+2.0;
@@ -1073,7 +1080,7 @@
 				entityMap.getIconFeatureById(`auto${i.toString()}`).setGeometry(new ol.geom.Point([px,py]));
 				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
 			}
-			for(var i = 5; i < 9; i++){
+			/*for(var i = 5; i < 9; i++){
 				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
 				var px = parseFloat(coordinates[0])-1.0;
 				var py = parseFloat(coordinates[1])+6.0;
@@ -1096,7 +1103,7 @@
 				
 				entityMap.getIconFeatureById(`auto${i.toString()}`).setGeometry(new ol.geom.Point([px,py]));
 				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
-			}
+			}*/
 		},100);
 
 		/*setInterval(function(){

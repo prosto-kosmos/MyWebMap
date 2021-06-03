@@ -4,8 +4,8 @@ class Entity{
         this._enabled = 'false';
         this._number = 'xx000x00';
         this._model = 'Brand not defined';
-        this._params = new Map();
-        this._streamlinks = new Map();
+        this._params = new Array();
+        this._streamlinks = new Array();
         this._position_n = 0.0;
         this._position_e = 0.0;
         this._iconFeature = new ol.Feature();
