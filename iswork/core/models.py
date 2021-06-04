@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import json
 
 class Data(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, verbose_name='Пользователь')
@@ -16,3 +17,19 @@ class Data(models.Model):
     class Meta:
         verbose_name='Данные' # напр.: Изменить данные
         verbose_name_plural='Данные' 
+
+class Settings(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name='Пользователь')
+    entity_id = models.CharField(verbose_name='Идентификатор объекта', primary_key=True, max_length=50)
+    visibility = models.BooleanField(verbose_name='Отображение указателя', default=True)
+    shown_param = models.BooleanField(verbose_name='Отображение списка параметров', default=False)
+    shown_preview = models.BooleanField(verbose_name='Отображение окна с превью', default=False)
+    hidden_params_ids = models.TextField(verbose_name='Список идентификаторов скрытых параметров', default=json.dumps([]))
+    shown_stream_ids = models.TextField(verbose_name='Список идентификаторов отображаемых видеопотоков', default=json.dumps([]))
+
+    def __str__(self):
+        return f'Настройки пользователя {self.user.username} (объект {self.entity_id})'
+
+    class Meta:
+        verbose_name='Настройки' # напр.: Изменить данные
+        verbose_name_plural='Настройки' 

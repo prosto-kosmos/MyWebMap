@@ -16,6 +16,14 @@ class EntityMap extends Map{
         return count;
     }
 
+    get getIdList(){
+        var ids = new Array();
+        for(var [auto_id, value] of this.entries()) {
+            ids.push(auto_id);
+        }
+        return ids;
+    }
+
     getNumberById(value){
         return this.get(value).getNumber;
     }

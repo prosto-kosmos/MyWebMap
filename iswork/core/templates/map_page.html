@@ -1064,7 +1064,19 @@
 			}
 		});
 
-
+		// Выставление пользовательских настроек
+		$.ajax({
+			url: '{% url "get_settings" %}',
+			method: 'post',
+			dataType:'json',
+			data: {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				ids: `${entityMap.getIdList}`,
+			},     
+			success: function(data){
+				//$('#search').val(data);
+			}
+		});
     </script>
 	
 	<script>

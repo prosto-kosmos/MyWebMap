@@ -1,7 +1,8 @@
+import json
 from django.shortcuts import render
 
 from .forms import AuthUserForm, RegisterUserForm
-from .models import Data
+from .models import Data, Settings
 from .data import getStartObjests, getCoordinatesObjests
 from django.http import HttpResponse
 from django.views.generic import CreateView, TemplateView, View
@@ -98,6 +99,32 @@ class SaveUserDataView(View):
         user_data.save()
         return HttpResponse(True)
 
+class GetStartObjectList(View):
+    def post(self, request):    
+        return HttpResponse(json.dumps(getStartObjests()))
+
 class GetCoorView(View):
     def post(self, request):    
         return HttpResponse(getCoordinatesObjests())
+
+class GetSettings(View):
+    def post(self, request):
+        settings = {}
+        for en_id in request.POST.get('ids').split(','): 
+            user_settings = Settings.objects.filter(user = request.user, entity_id = en_id)   
+            if len(user_settings)==0:
+                d = Settings(user = request.user, entity_id = en_id)
+                d.save()
+                user_settings = Settings.objects.filter(user = request.user, entity_id = en_id)
+            user_settings = user_settings[0]
+            settings.update({
+                user_settings.entity_id:{
+                    'entity_id': user_settings.entity_id,
+                    'visibility': user_settings.visibility,
+                    'shown_param': user_settings.shown_param,
+                    'shown_preview': user_settings.shown_preview,
+                    'hidden_params_ids': json.loads(user_settings.hidden_params_ids),
+                    'shown_stream_ids': json.loads(user_settings.shown_stream_ids),
+                }
+            })
+        return HttpResponse(json.dumps(settings))
