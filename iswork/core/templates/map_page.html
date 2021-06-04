@@ -252,6 +252,7 @@
 
 
     <script>
+		//$('#all_show_param').click();
 
 		// Функционал подгона высоты родительского div
 		$('#fullscreen').css({'height':`${document.documentElement.clientHeight-70}px`});
@@ -401,6 +402,23 @@
 			return ShowListEntity;
 		}(ol.control.Control));
 
+
+		// Выставление пользовательских настроек
+		var settings;
+		$.ajax({
+			url: '{% url "get_settings" %}',
+			method: 'post',
+			dataType:'json',
+			async: false,
+			data: {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				ids: `${entityMap.getIdList}`,
+			},     
+			success: function(data){
+				settings = data;
+			}
+		});
+
 		// Создание карты
 	    var map = new ol.Map({
 			controls: ol.control.defaults().extend([
@@ -517,16 +535,14 @@
 			var streamLinksIndicators = '';
 			var streamLinksIndicatorsFull = '';
 
-			// Формирование блока со списком параметров:
-			// Данные настроек (показать(скрыть)) параметр хранятся в куки
-			// Ключ куки: id переключателя параметра в настройках
-			// Значение: "checked" или если не определен - показать, "" - скрыть 
+			// Формирование блока со списком параметров
 			for(var param of params) {
-				if($.cookie(`sw_${param.get('params_id')}_${entityId}`) != ''){
-					paramsContent+= `<p id="p_sw_${param.get('params_id')}_${entityId}" class="m-0">${param.get('params_alias')}: ${param.get('params_value')}</p>`;
+				var hiddenParamList = settings[entityId]['hidden_params_ids'];
+				if(hiddenParamList.indexOf(param.get('params_id')) >= 0){
+					paramsContent+= `<p id="p_sw_${param.get('params_id')}_${entityId}" class="m-0" style="display:none;">${param.get('params_alias')}: ${param.get('params_value')}</p>`;
 				}	
 				else{
-					paramsContent+= `<p id="p_sw_${param.get('params_id')}_${entityId}" class="m-0" style="display:none;">${param.get('params_alias')}: ${param.get('params_value')}</p>`;
+					paramsContent+= `<p id="p_sw_${param.get('params_id')}_${entityId}" class="m-0">${param.get('params_alias')}: ${param.get('params_value')}</p>`;
 				}				
 			}
 			
@@ -704,8 +720,9 @@
 						var settingsContent = '';
 						for(var param of params) {
 							var isCheck = 'checked';
-							if($.cookie(`sw_${param.get('params_id')}_${entityId}`) != undefined){
-								isCheck = $.cookie(`sw_${param.get('params_id')}_${entityId}`);
+							var hiddenParamList = settings[entityId]['hidden_params_ids'];
+							if(hiddenParamList.indexOf(param.get('params_id')) >= 0){
+								isCheck = "";
 							}
 							
 							settingsContent+= `
@@ -727,11 +744,11 @@
 							var swParam = document.getElementById(`sw_${param.get('params_id')}_${entityId}`);
 							swParam.addEventListener("change", function () {
 								if (this.checked){
-									$.cookie(`${this.id}`, 'checked');
+									//$.cookie(`${this.id}`, 'checked');
 									$(`#p_${this.id}`).css({'display': ''});
 								}
 								else{
-									$.cookie(`${this.id}`, '');
+									//$.cookie(`${this.id}`, '');
 									$(`#p_${this.id}`).css({'display': 'none'});
 								}
 							}, false);
@@ -938,10 +955,10 @@
 					featureIcon.setStyle(new ol.style.Style({}));
 					var p = entityMap.getPopupById(car_id).getElement();
 					$(p).popover('dispose');
-					$.cookie(`view_${car_id}`, '');
+					//$.cookie(`view_${car_id}`, '');
 				} else {
 					featureIcon.setStyle(iconStyle);
-					$.cookie(`view_${car_id}`, 'checked');
+					//$.cookie(`view_${car_id}`, 'checked');
 				}
 			}, false);
 		}
@@ -998,11 +1015,18 @@
 			}
 		}
 
-		// Считывание из куки видимость каждого Entity
+		// Считывание из настроек видимость каждого Entity
 		for(var j = 0; j < view_switch.length; j++){
-			if ($.cookie(`view_${view_switch[j].id}`) == ''){
+			var visibility = settings[view_switch[j].id]['visibility'];
+			var shown_param = settings[view_switch[j].id]['shown_param'];
+			var shown_preview = settings[view_switch[j].id]['shown_preview'];
+			if(!visibility){
 				view_switch[j].click();
 			}	
+			if(shown_param){
+				//showWindow(entityMap.getIconFeatureById(view_switch[j].id));
+			}
+			
 		}
 
 		// Обработка ползунков настроек
@@ -1061,20 +1085,6 @@
 				$('#objectstreamlist h5').css({'font-size':stopResize/100*5});
 				$('.stream-close').css({'padding-block':'5px'});
 				$('.stream-close').css({'padding-inline':'10px'});
-			}
-		});
-
-		// Выставление пользовательских настроек
-		$.ajax({
-			url: '{% url "get_settings" %}',
-			method: 'post',
-			dataType:'json',
-			data: {
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				ids: `${entityMap.getIdList}`,
-			},     
-			success: function(data){
-				//$('#search').val(data);
 			}
 		});
     </script>
