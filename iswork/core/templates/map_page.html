@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
 	<script src="https://unpkg.com/elm-pep"></script>
-	<script type="text/javascript" src="{% static "jquery.cookie.js" %}"></script>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
@@ -147,7 +146,7 @@
 					<div id="videoModalContent"></div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
 				</div>
 				</div>
 			</div>
@@ -165,7 +164,7 @@
 					<div id="settingsModalContent"></div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
 				</div>
 				</div>
 			</div>
@@ -237,7 +236,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
 				</div>
 				</div>
 			</div>
@@ -252,7 +251,7 @@
 
 
     <script>
-		//$('#all_show_param').click();
+		$('#all_show_param').click();
 
 		// Функционал подгона высоты родительского div
 		$('#fullscreen').css({'height':`${document.documentElement.clientHeight-70}px`});
@@ -511,10 +510,6 @@
 				`);
 			}
 		}
-
-		/*function setFontSizeVideostreamList(){
-			$('#liststream h1').css({'font-size': $('#liststream').width()/100*8});
-		}*/
 		
 		// Функция показа окна с параметрами
 		function showWindow (feature){
@@ -743,12 +738,13 @@
 						for(var param of params) {
 							var swParam = document.getElementById(`sw_${param.get('params_id')}_${entityId}`);
 							swParam.addEventListener("change", function () {
+								par = this.id.split('_')[1];
 								if (this.checked){
-									//$.cookie(`${this.id}`, 'checked');
+									settings[entityId]['hidden_params_ids'].pop(par);
 									$(`#p_${this.id}`).css({'display': ''});
 								}
 								else{
-									//$.cookie(`${this.id}`, '');
+									settings[entityId]['hidden_params_ids'].push(par);
 									$(`#p_${this.id}`).css({'display': 'none'});
 								}
 							}, false);
@@ -775,6 +771,7 @@
 							button_more.css({'display':'inline-flex'});
 							button_close.css({'display':'inline-flex'});
 						}
+						settings[entityId]['shown_preview'] = true;
 					});
 
 					// Обработка нажатия на кнопку "-" - скрыть превью
@@ -795,14 +792,22 @@
 							button_more.css({'display':'none'});
 							button_close.css({'display':'none'});
 						}
+						settings[entityId]['shown_preview'] = false;
+						showWindow(feature);
 					});
 
 					// Обработка закрытия окна
 					$(element).find('#span_close').on('click', function(e) {
 						$(element).popover('dispose');
+						// Сохранение видимости окна в настройки
+						settings[entityId]['shown_param'] = false;
+						settings[entityId]['shown_preview'] = false;
 					});
 					$(element).find('#span_close_min').on('click', function(e) {
 						$(element).popover('dispose');
+						// Сохранение видимости окна в настройки
+						settings[entityId]['shown_param'] = false;
+						settings[entityId]['shown_preview'] = false;
 					});
 
 					// Контекстное окно над видеопотоком
@@ -848,6 +853,9 @@
 				zIndexPopupCount +=1;
 				$(element).parent().css({"z-index":zIndexPopupCount});	
 			});
+
+			// Сохранение видимости окна в настройки
+			settings[entityId]['shown_param'] = true;
 		}
 
 		// Нажатие на иконку Entity
@@ -955,10 +963,12 @@
 					featureIcon.setStyle(new ol.style.Style({}));
 					var p = entityMap.getPopupById(car_id).getElement();
 					$(p).popover('dispose');
-					//$.cookie(`view_${car_id}`, '');
+					settings[car_id]['visibility'] = false;
+					settings[car_id]['shown_param'] = false;
+					settings[car_id]['shown_preview'] = false;
 				} else {
 					featureIcon.setStyle(iconStyle);
-					//$.cookie(`view_${car_id}`, 'checked');
+					settings[car_id]['visibility'] = true;
 				}
 			}, false);
 		}
@@ -966,9 +976,18 @@
 		// Обработка события показа(скрытия) всех указателей entity
 		var view_switch_all = document.getElementById("all_show");
 		view_switch_all.addEventListener("change", function () {
+			
 			for(var j = 0; j < view_button_show.length; j++){
 				if (view_switch[j].checked != this.checked){
 					view_switch[j].click();
+				}
+			}
+			for(var setting in settings){
+				if(this.checked){
+					settings[setting]['visibility'] = true;
+				}
+				else{
+					settings[setting]['visibility'] = false;
 				}
 			}
 		}, false);
@@ -990,6 +1009,16 @@
 					$(element).popover('dispose');
 				}
 			}
+
+			for(var setting in settings){
+				if(this.checked){
+					settings[setting]['shown_param'] = true;
+				}
+				else{
+					settings[setting]['shown_param'] = false;
+					settings[setting]['shown_preview'] = false;
+				}
+			}
 		}, false);
 
 		// Обработка показа(скрытия) видеопотоков
@@ -998,9 +1027,14 @@
 				$(`#${entity_id}_${stream.get('stream_id')}`).on("change", function () {
 					if (this.checked){
 						$(`#stream_${this.id}`).css({"display":"block"});
+						if(settings[this.id.split('_')[0]]['shown_stream_ids'].indexOf(this.id.split('_')[1])==-1){
+							settings[this.id.split('_')[0]]['shown_stream_ids'].push(this.id.split('_')[1]);
+							alert('add ' + this.id.split('_')[0] + ' ' + this.id.split('_')[1]);
+						}
 					}
 					else{
 						$(`#stream_${this.id}`).css({"display":"none"});
+						settings[this.id.split('_')[0]]['shown_stream_ids'].pop(this.id.split('_')[1]);
 					}
 				});
 			}
@@ -1015,19 +1049,6 @@
 			}
 		}
 
-		// Считывание из настроек видимость каждого Entity
-		for(var j = 0; j < view_switch.length; j++){
-			var visibility = settings[view_switch[j].id]['visibility'];
-			var shown_param = settings[view_switch[j].id]['shown_param'];
-			var shown_preview = settings[view_switch[j].id]['shown_preview'];
-			if(!visibility){
-				view_switch[j].click();
-			}	
-			if(shown_param){
-				//showWindow(entityMap.getIconFeatureById(view_switch[j].id));
-			}
-			
-		}
 
 		// Обработка ползунков настроек
 		function dragRange1(){
@@ -1066,11 +1087,6 @@
 			});
 		}
 
-		/*new ResizeSensor(jQuery('.streampanel'), function(){ 
-			console.log('content dimension changed');
-			alert($('#objectstreamlist').width());
-		});*/
-
 		var streamList = $('#objectstreamlist');
 		var stopResize = 220; //px
 		var sensor = new ResizeSensor(streamList, function(){
@@ -1087,6 +1103,76 @@
 				$('.stream-close').css({'padding-inline':'10px'});
 			}
 		});
+
+		window.onload = function() {
+			// Считывание из настроек видимость каждого Entity и его окон
+			for(var j = 0; j < view_switch.length; j++){
+				var visibility = settings[view_switch[j].id]['visibility'];
+				var shown_param = settings[view_switch[j].id]['shown_param'];
+				var shown_preview = settings[view_switch[j].id]['shown_preview'];
+				if(!visibility){
+					view_switch[j].click();
+					continue;
+				}	
+				if(shown_param){
+					showWindow(entityMap.getIconFeatureById(view_switch[j].id));
+					if(shown_preview){
+						$(`#popup_${view_switch[j].id} #span_more`).click();
+					}
+				}
+			}
+
+			// Считывание из настроек видимость видеопотоков
+			for(var [entity_id, value] of entityMap.entries()) {
+				var shownStreamList = settings[entity_id]['shown_stream_ids'];
+				for(var stream of value.getStreamLinks) {
+					if(shownStreamList.indexOf(stream.get('stream_id')) >= 0){
+						$('#list').find(`#${entity_id}_${stream.get('stream_id')}`).click();
+					}
+				}
+			}
+		};
+
+		function saveUserSettings(save_settings){
+			$.ajax({
+				url: '{% url "usersettings_save" %}',
+				method: 'post',
+				dataType:'json',
+				async:false,
+				data: {
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					settings:JSON.stringify(save_settings),
+				},     
+				success: function(data){ 
+					console.log(data);
+				}
+			});
+		}
+
+		function runOnKeys(func, ...codes) {
+			let pressed = new Set();
+			document.addEventListener('keydown', function(event) {
+				pressed.add(event.code);
+
+				for (let code of codes) { // все ли клавиши из набора нажаты?
+				if (!pressed.has(code)) {
+					return;
+				}
+				}
+				pressed.clear();
+
+				func();
+			});
+			document.addEventListener('keyup', function(event) {
+				pressed.delete(event.code);
+			});
+		}
+		runOnKeys(
+			() => saveUserSettings(settings),
+			"ShiftLeft",
+			"KeyS"
+		);
+
     </script>
 	
 	<script>
@@ -1105,7 +1191,7 @@
 				}
 			});*/
 			
-			for(var i = 1; i < 3; i++){
+			for(var i = 1; i < 6; i++){
 				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
 				var px = parseFloat(coordinates[0])+5.0;
 				var py = parseFloat(coordinates[1])+2.0;

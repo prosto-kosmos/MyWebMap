@@ -124,7 +124,7 @@ def getStartObjests():
                     },
                 ],
                 'position_n':'6990148.408997443',
-                'position_e':'4016299.440906363',
+                'position_e':'4010299.440906363',
             },
             {
                 'entity_id':'auto4',
@@ -169,8 +169,8 @@ def getStartObjests():
                         'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
                     },
                 ],
-                'position_n':'6990348.408997443',
-                'position_e':'4015499.440906363',
+                'position_n':'6957810.398997443',
+                'position_e':'4046659.540906363',
             },
             {
                 'entity_id':'auto5',
@@ -215,8 +215,8 @@ def getStartObjests():
                         'stream_value':'https://obninsksite.ru/assets/theme/images/blog/slider/4.jpg',
                     },
                 ],
-                'position_n':'6990648.408997443',
-                'position_e':'4016599.440906363',
+                'position_n':'6907781.308997443',
+                'position_e':'4056477.640906363',
             },
         ]
         # 'auto6':

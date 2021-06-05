@@ -99,6 +99,22 @@ class SaveUserDataView(View):
         user_data.save()
         return HttpResponse(True)
 
+class SaveUserSettingsView(View):
+    def post(self, request):
+        settings = json.loads(request.POST.get('settings'))
+        for s in settings.values():
+            print(s)
+        for setting in settings.values():
+            user_settings = Settings.objects.filter(user = request.user, entity_id = setting['entity_id'])
+            user_settings = user_settings[0]
+            user_settings.visibility = setting['visibility']
+            user_settings.shown_param = setting['shown_param']
+            user_settings.shown_preview = setting['shown_preview']
+            user_settings.hidden_params_ids = json.dumps(setting['hidden_params_ids'])
+            user_settings.shown_stream_ids = json.dumps(setting['shown_stream_ids'])
+            user_settings.save()
+        return HttpResponse(True)
+
 class GetStartObjectList(View):
     def post(self, request):    
         return HttpResponse(json.dumps(getStartObjests()))

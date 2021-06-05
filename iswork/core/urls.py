@@ -10,6 +10,7 @@ urlpatterns = [
     path('map', views.MapView.as_view(), name='map_page'),
 
     path('userdata_save_ajax/', views.SaveUserDataView.as_view(), name='userdata_save'),
+    path('usersettings_save_ajax/', views.SaveUserSettingsView.as_view(), name='usersettings_save'),
 
     path('get_coor_ajax/', views.GetCoorView.as_view(), name='get_coor'),
     path('get_start_ajax/', views.GetStartObjectList.as_view(), name='get_start'),
