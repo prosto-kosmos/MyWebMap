@@ -45,6 +45,8 @@
                 <div class="col-4">
                     <div class="navbar-nav justify-content-end">
                         {% if request.user.is_authenticated %}
+                            {% block top_nav_buttons_right %}
+                            {% endblock %} 
                             <div class="nav-item">
                                 {% url 'map_page' as url_map_page %}
                                 <a class="nav-link btn btn-outline-success mx-1" href="{{url_map_page}}">Карта</a>
