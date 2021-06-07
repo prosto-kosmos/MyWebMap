@@ -14,7 +14,9 @@
     </li>
 {% endblock %}
 
-{% block css %}
+{% block title %}Карта{% endblock %}
+
+{% block header %}
 	<!--   jQuery и OpenLayers можно скачать на официальных сайтах и использовать оффлайн -->
 	<!-- 		  jQuery      - https://jquery.com/download/ -->
 	<!-- 		OpenLayers    - https://openlayers.org/download/ -->
@@ -223,7 +225,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row gsettings-row">
+						<div class="row">
 							<div class="col">
 								<label for="all_show_param" class="form-label">Показать (скрыть) все окна с параметрами</label>
 							</div>
@@ -233,19 +235,34 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col">
-								<label for="btn_reset_settings" class="form-label">Сброс настроек</label>
-							</div>
-							<div class="col-2 gsettings-col">
-								<button type="button" id="btn_reset_settings" class="btn btn-outline-danger">Сброс</button>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="button" id="btn_reset_settings" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#resetModal">Сброс</button>
 					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
 				</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Модальное окно подтверждения сброса настроек -->
+		<div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalTitle" aria-hidden="true">
+			<div class="modal-dialog modal-sm modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="resetModalTitle">Сброс настроек</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div id="resetModalContent">
+							<p><i>Будут сброшены настройки отображения указателей и видеопотоков, а также перезагружена страница</i></p>
+							<b>Вы уверены?</b>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-outline-danger" id="btn_reset">Сброс</button>
+						<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1045,6 +1062,14 @@
 			}
 		}
 
+		// Обработка нажатия на кнопку "Сброс"
+		$(document).ready(function() {
+			$("#btn_reset").click(function(){
+				saveUserSettings(reset=true);
+				location.reload();
+			}); 
+		});
+
 
 		// Обработка ползунков настроек
 		function dragRange1(){
@@ -1112,15 +1137,16 @@
 			}
 		};
 
-		function saveUserSettings(){
+		function saveUserSettings(reset=false){
 			$.ajax({
 				url: '{% url "set_settings" %}',
 				method: 'post',
 				dataType:'json',
-				async:false,
+				async:true,
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 					settings:JSON.stringify(settings),
+					reset: reset,
 					global_settings:JSON.stringify({
 						zoom: view.getZoom(),
 						position_e: view.getCenter()[0],

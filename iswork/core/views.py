@@ -73,39 +73,52 @@ class MapView(LoginRequiredMixin, View):
 
 class SaveUserSettingsView(View):
     def post(self, request):
-        settings = json.loads(request.POST.get('settings'))
-        # for s in settings.values():
-        #     print(s)
-        for setting in settings.values():
-            user_settings = Settings.objects.filter(user = request.user, entity_id = setting['entity_id'])
-            user_settings = user_settings[0]
-            user_settings.visibility = setting['visibility']
-            user_settings.shown_param = setting['shown_param']
-            user_settings.shown_preview = setting['shown_preview']
-            user_settings.hidden_params_ids = json.dumps(setting['hidden_params_ids'])
-            user_settings.shown_stream_ids = json.dumps(setting['shown_stream_ids'])
-            user_settings.save()
+        try:
+            isReset = json.loads(request.POST.get('reset').lower())
+            if not isReset:
+                settings = json.loads(request.POST.get('settings'))
+                # for s in settings.values():
+                #     print(s)
+                for setting in settings.values():
+                    user_settings = Settings.objects.filter(user = request.user, entity_id = setting['entity_id'])
+                    if len(user_settings)==0:
+                        d = Settings(user = request.user, entity_id = setting['entity_id'])
+                        d.save()
+                        user_settings = Settings.objects.filter(user = request.user, entity_id = setting['entity_id'])
+                    user_settings = user_settings[0]
+                    user_settings.visibility = setting['visibility']
+                    user_settings.shown_param = setting['shown_param']
+                    user_settings.shown_preview = setting['shown_preview']
+                    user_settings.hidden_params_ids = json.dumps(setting['hidden_params_ids'])
+                    user_settings.shown_stream_ids = json.dumps(setting['shown_stream_ids'])
+                    user_settings.save()
 
-        user_data = Data.objects.filter(user = request.user)
-        if len(user_data)==0:
-            d = Data(user = request.user)
-            d.save()
-            user_data = Data.objects.filter(user = request.user)
-        user_data = user_data[0]
+                user_data = Data.objects.filter(user = request.user)
+                if len(user_data)==0:
+                    d = Data(user = request.user)
+                    d.save()
+                    user_data = Data.objects.filter(user = request.user)
+                user_data = user_data[0]
 
-        global_settings = json.loads(request.POST.get('global_settings'))
-        # print(global_settings)
+                global_settings = json.loads(request.POST.get('global_settings'))
+                # print(global_settings)
 
-        user_data.zoom = global_settings['zoom']
-        user_data.position_e = global_settings['position_e']
-        user_data.position_n = global_settings['position_n']
+                user_data.zoom = global_settings['zoom']
+                user_data.position_e = global_settings['position_e']
+                user_data.position_n = global_settings['position_n']
 
-        user_data.settings_size_text = global_settings['s_size_text']
-        user_data.settings_size_preview = global_settings['s_size_preview']
-        user_data.settings_opacity_windows = global_settings['s_opacity_windows']
+                user_data.settings_size_text = global_settings['s_size_text']
+                user_data.settings_size_preview = global_settings['s_size_preview']
+                user_data.settings_opacity_windows = global_settings['s_opacity_windows']
 
-        user_data.save()
-        return HttpResponse(True)
+                user_data.save()
+            else:
+                all_settings = Settings.objects.filter(user = request.user)
+                all_settings.delete()
+            return HttpResponse(True)
+        except:
+            print('Error SaveUserSettingsView')
+            return HttpResponse(False)
 
 
 class GetSettings(View):
