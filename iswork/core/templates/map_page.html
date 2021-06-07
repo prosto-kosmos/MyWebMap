@@ -223,7 +223,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row gsettings-row">
 							<div class="col">
 								<label for="all_show_param" class="form-label">Показать (скрыть) все окна с параметрами</label>
 							</div>
@@ -231,6 +231,14 @@
 								<div class="form-check form-switch">
 									<input id="all_show_param" class="form-check-input" type="checkbox" checked>
 								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label for="btn_reset_settings" class="form-label">Сброс настроек</label>
+							</div>
+							<div class="col-2 gsettings-col">
+								<button type="button" id="btn_reset_settings" class="btn btn-outline-danger">Сброс</button>
 							</div>
 						</div>
 					</div>
@@ -404,6 +412,12 @@
 
 		// Выставление пользовательских настроек
 		var settings;
+		var position_e = parseFloat('{{position_e}}'.replace(",", "."));
+		var position_n = parseFloat('{{position_n}}'.replace(",", "."));
+		var zoom = parseFloat('{{zoom}}'.replace(",", "."));
+		var settings_size_text = '{{settings_size_text}}';
+		var settings_size_preview = '{{settings_size_preview}}';
+		var settings_opacity_windows = parseFloat('{{settings_opacity_windows}}'.replace(",", "."));
 		$.ajax({
 			url: '{% url "get_settings" %}',
 			method: 'post',
@@ -442,9 +456,6 @@
 	    });
 		
 		// Установка начального положения карты
-		var position_e = parseFloat('{{position_e}}'.replace(",", "."));
-		var position_n = parseFloat('{{position_n}}'.replace(",", "."));
-		var zoom = parseFloat('{{zoom}}'.replace(",", "."));
 		var view = map.getView();
 		view.setCenter([position_e, position_n]);
 		view.setZoom(zoom);
@@ -454,20 +465,6 @@
 
 		// Сохранение положения карты на сервер
 		map.on('moveend', function () {
-			$.ajax({
-				url: '{% url "userdata_save" %}',
-				method: 'post',
-				dataType:'json',
-				data: {
-					zoom: view.getZoom(),
-					position_e: view.getCenter()[0],
-					position_n: view.getCenter()[1],
-					csrfmiddlewaretoken: '{{ csrf_token }}',
-				},     
-				success: function(data){ 
-					console.log(data);
-				}
-			});
 			$('#fullscreen').css({'height':`${document.documentElement.clientHeight-70}px`});
 			map.updateSize();
 		});
@@ -1029,7 +1026,6 @@
 						$(`#stream_${this.id}`).css({"display":"block"});
 						if(settings[this.id.split('_')[0]]['shown_stream_ids'].indexOf(this.id.split('_')[1])==-1){
 							settings[this.id.split('_')[0]]['shown_stream_ids'].push(this.id.split('_')[1]);
-							alert('add ' + this.id.split('_')[0] + ' ' + this.id.split('_')[1]);
 						}
 					}
 					else{
@@ -1055,36 +1051,19 @@
 			var rng = document.getElementById('customRange1');
 			$('#contentRange1').html(rng.value +'px');
 			$('.params-lines').css({'font-size': rng.value +'px'});
-			saveGlobalSettings('settings_size_text', rng.value);
+			settings_size_text =  rng.value;
 		}
 		function dragRange2(){
 			var rng = document.getElementById('customRange2');
 			$('#contentRange2').html(rng.value +'px');
 			$('.carousel-inner').css({'width': rng.value +'px'});
-			saveGlobalSettings('settings_size_preview', rng.value);
+			settings_size_preview = rng.value;
 		}
 		function dragRange3(){
 			var rng = document.getElementById('customRange3');
 			$('#contentRange3').html(rng.value * 100 +'%');
 			$('.popover').css({'opacity': rng.value});
-			saveGlobalSettings('settings_opacity_windows', rng.value);
-		}
-
-		// Cохранение глобальных настроек
-		function saveGlobalSettings(settingsId, settingsValue){
-			$.ajax({
-				url: '{% url "userdata_save" %}',
-				method: 'post',
-				dataType:'json',
-				data: {
-					settingsId: settingsId,
-					settingsValue: settingsValue,
-					csrfmiddlewaretoken: '{{ csrf_token }}',
-				},     
-				success: function(data){ 
-					console.log(data);
-				}
-			});
+			settings_opacity_windows = rng.value;
 		}
 
 		var streamList = $('#objectstreamlist');
@@ -1133,15 +1112,23 @@
 			}
 		};
 
-		function saveUserSettings(save_settings){
+		function saveUserSettings(){
 			$.ajax({
-				url: '{% url "usersettings_save" %}',
+				url: '{% url "set_settings" %}',
 				method: 'post',
 				dataType:'json',
 				async:false,
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
-					settings:JSON.stringify(save_settings),
+					settings:JSON.stringify(settings),
+					global_settings:JSON.stringify({
+						zoom: view.getZoom(),
+						position_e: view.getCenter()[0],
+						position_n: view.getCenter()[1],
+						s_size_text: parseFloat(settings_size_text),
+						s_size_preview: parseFloat(settings_size_preview),
+						s_opacity_windows: parseFloat(settings_opacity_windows),
+					}),
 				},     
 				success: function(data){ 
 					console.log(data);
@@ -1153,14 +1140,12 @@
 			let pressed = new Set();
 			document.addEventListener('keydown', function(event) {
 				pressed.add(event.code);
-
 				for (let code of codes) { // все ли клавиши из набора нажаты?
-				if (!pressed.has(code)) {
-					return;
-				}
+					if (!pressed.has(code)) {
+						return;
+					}
 				}
 				pressed.clear();
-
 				func();
 			});
 			document.addEventListener('keyup', function(event) {
@@ -1168,7 +1153,7 @@
 			});
 		}
 		runOnKeys(
-			() => saveUserSettings(settings),
+			() => saveUserSettings(),
 			"ShiftLeft",
 			"KeyS"
 		);
