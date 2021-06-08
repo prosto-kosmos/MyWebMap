@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from .forms import AuthUserForm, RegisterUserForm
 from .models import Data, Settings
-from .data import getStartObjests, getCoordinatesObjests
+from .data import getStartObjests, getNewDataObjests
 from django.http import HttpResponse
 from django.views.generic import CreateView, TemplateView, View
 from django.urls import reverse, reverse_lazy
@@ -144,6 +144,6 @@ class GetSettings(View):
         return HttpResponse(json.dumps(settings))
 
 
-class GetCoorView(View):
+class GetNewDataView(View):
     def post(self, request):    
-        return HttpResponse(getCoordinatesObjests())
+        return HttpResponse(getNewDataObjests())

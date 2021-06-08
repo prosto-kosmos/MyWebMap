@@ -11,5 +11,5 @@ urlpatterns = [
 
     path('set_settings_ajax/', views.SaveUserSettingsView.as_view(), name='set_settings'),
     path('get_settings_ajax/', views.GetSettings.as_view(), name='get_settings'),
-    path('get_coor_ajax/', views.GetCoorView.as_view(), name='get_coor'),
+    path('get_new_data_ajax/', views.GetNewDataView.as_view(), name='get_new_data'),
 ]

@@ -10,41 +10,30 @@
 {% block top_nav_buttons_left %}
     <li class="nav-item px-3">
         {% url 'index_url' as index_page_url %}
-        <a class="nav-link btn btn-outline-secondary" href="{{index_page_url}}">На главную</a>
+        <a class="btn btn-outline-secondary" href="{{index_page_url}}">На главную</a>
     </li>
-{% endblock %}
-
-{% block top_nav_buttons_right %}
-	<div class="nav-item" title="Сохранить(Shift+S)">
-		<button class="nav-link btn btn-outline-primary mx-1" onclick="saveUserSettings()">
-			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
-				<path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
-			</svg>
-		</button>
-	</div>
-{% endblock %}              
+{% endblock %}             
 
 {% block title %}Карта{% endblock %}
 
 {% block header %}
-	<!--   jQuery и OpenLayers можно скачать на официальных сайтах и использовать оффлайн -->
-	<!-- 		  jQuery      - https://jquery.com/download/ -->
-	<!-- 		OpenLayers    - https://openlayers.org/download/ -->
+	<!-- OpenLayers - https://openlayers.org/download/ -->
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
-	<script src="https://unpkg.com/elm-pep"></script>
+    <link rel="stylesheet" href="{% static "openlayer-6.5.0/ol.css" %}" type="text/css">
+    <script type="text/javascript" src="{% static "openlayer-6.5.0/ol.js" %}"></script>
+	<script src="{% static "js/elm-pep.js" %}"></script>
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
+	<!-- https://github.com/swisnl/jQuery-contextMenu -->
+	<link rel="stylesheet" href="{% static "css/jquery.contextMenu.min.css" %}">
+	<script src="{% static "js/jquery.contextMenu.min.js" %}"></script>
+	<script src="{% static "js/jquery.ui.position.js" %}"></script>
 	
-	<script src="{% static "ElementQueries.js" %}"></script>
-	<script src="{% static "ResizeSensor.js" %}"></script>
+	<script src="{% static "js/ElementQueries.js" %}"></script>
+	<script src="{% static "js/ResizeSensor.js" %}"></script>
 
-	<script src="{% static "jquery.splitter.js" %}"></script>
-    <link href="{% static "jquery.splitter.css" %}" rel="stylesheet"/>	
-	<link rel="stylesheet" href="{% static "mystyles.css" %}">
+	<script src="{% static "js/jquery.splitter.js" %}"></script>
+    <link href="{% static "css/jquery.splitter.css" %}" rel="stylesheet"/>	
+	<link rel="stylesheet" href="{% static "css/mystyles.css" %}">
 
 {% endblock %}
 
@@ -145,24 +134,6 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- Модальное окно с подробным отображением видеопотока -->
-		<!-- <div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="videoModalTitle">Автомобиль</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					<div id="videoModalContent"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Закрыть</button>
-				</div>
-				</div>
-			</div>
-		</div> -->
 
 		<!-- Модальное окно с настройками отбражаемых объектов -->
 		<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalTitle" aria-hidden="true">
@@ -279,10 +250,10 @@
     </div>
 
 	<!-- Подключение класса отображаемого объекта, в дальнейшем "отображаемый объект" и "Entity" - синонимы -->
-	<script src="{% static "Entity.js" %}"></script>
+	<script src="{% static "js/Entity.js" %}"></script>
 
 	<!-- Подключение класса - контейнера хранения Entity. EntityMap наследуется от Map -->
-	<script src="{% static "EntityMap.js" %}"></script>
+	<script src="{% static "js/EntityMap.js" %}"></script>
 
 
     <script>
@@ -339,7 +310,7 @@
 				anchor: [0.4475, 32],
 				anchorXUnits: 'fraction',
 				anchorYUnits: 'pixels',
-				src: '{% static "icon.png" %}',
+				src: '{% static "media/icon.png" %}',
 			}),
 		});
 
@@ -396,24 +367,24 @@
 			source: vectorSource,
 		});
 
-		// Управление SidePanel - панелью со списком Entity
-		var ShowListEntity = /*@__PURE__*/(function (Control) {
-			function ShowListEntity(opt_options) {
+		// Добавление кнопки скрытия панели со списком Entity
+		var BtnShowSidePanel = /*@__PURE__*/(function (Control) {
+			function BtnShowSidePanel(opt_options) {
 				var options = opt_options || {};
 			
-				var button = document.createElement('button');
-				button.innerHTML = '«'; // Alt + 0171 и Alt + 0187. 
+				var btn_sidepanel = document.createElement('button');
+				btn_sidepanel.innerHTML = '«'; // Alt + 0171 и Alt + 0187
 
-				var element = document.createElement('div');
-				element.className = 'rotate-north ol-unselectable ol-control';
-				element.appendChild(button);
+				var element_sidepanel = document.createElement('div');
+				element_sidepanel.className = 'btn-sidepanel-show ol-unselectable ol-control';
+				element_sidepanel.appendChild(btn_sidepanel);
 
 				ol.control.Control.call(this, {
-					element: element,
+					element: element_sidepanel,
 					target: options.target,
 				});
 					
-				button.addEventListener('click', function(){
+				btn_sidepanel.addEventListener('click', function(){
 					if (this.innerHTML == '«'){
 						document.getElementById('sidepanel').hidden = true;
 						splitter.refresh();
@@ -430,12 +401,39 @@
 				}, false);
 			}
 
-			if (Control) ShowListEntity.__proto__ = ol.control.Control;
-			ShowListEntity.prototype = Object.create( ol.control.Control && ol.control.Control.prototype );
-			ShowListEntity.prototype.constructor = ShowListEntity;
-			return ShowListEntity;
+			if (Control) BtnShowSidePanel.__proto__ = ol.control.Control;
+			BtnShowSidePanel.prototype = Object.create( ol.control.Control && ol.control.Control.prototype );
+			BtnShowSidePanel.prototype.constructor = BtnShowSidePanel;
+			return BtnShowSidePanel;
 		}(ol.control.Control));
 
+		// Добавление кнопки сохранения настроек
+		var BtnSaveSettings = /*@__PURE__*/(function (Control) {
+			function BtnSaveSettings(opt_options) {
+				var options = opt_options || {};
+			
+				var btn_save = document.createElement('button');
+				btn_save.innerHTML = '💾';
+
+				var element_save = document.createElement('div');
+				element_save.className = 'btn-save-settings ol-unselectable ol-control';
+				element_save.appendChild(btn_save);
+
+				ol.control.Control.call(this, {
+					element: element_save,
+					target: options.target,
+				});
+					
+				element_save.addEventListener('click', function(){
+					saveUserSettings();
+				}, false);
+			}
+
+			if (Control) BtnSaveSettings.__proto__ = ol.control.Control;
+			BtnSaveSettings.prototype = Object.create( ol.control.Control && ol.control.Control.prototype );
+			BtnSaveSettings.prototype.constructor = BtnSaveSettings;
+			return BtnSaveSettings;
+		}(ol.control.Control));
 
 		// Выставление пользовательских настроек
 		var settings;
@@ -465,7 +463,8 @@
 				new ol.control.FullScreen({
 					source: 'fullscreen',
 				}),
-				new ShowListEntity(),
+				new BtnShowSidePanel(),
+				new BtnSaveSettings(),
 			]),
 			target: 'map',
 			layers: [
@@ -577,7 +576,7 @@
 							<div class="title-prd">
 								<p class="title-prt">${stream.get('stream_alias')}</p>
 							</div>
-							<img src=${stream.get('stream_value')} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "videostream.png" %}'">
+							<img src=${stream.get('stream_value')} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "media/videostream.png" %}'">
 						</div>
 					`;
 					streamLinksIndicators+=`
@@ -593,7 +592,7 @@
 							<div class="title-prd">
 								<p class="title-prt">${stream.get('stream_alias')}</p>
 							</div>
-							<img src=${stream.get('stream_value')} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "videostream.png" %}'">
+							<img src=${stream.get('stream_value')} class="d-block w-100" alt="Видео не найдено" onerror="this.src ='{% static "media/videostream.png" %}'">
 						</div>
 					`;
 					streamLinksIndicators+=`
@@ -611,7 +610,7 @@
 			if(!countCarousel){
 				streamLinksContent+= `
 					<div class="carousel-item active">
-						<img src="{% static "videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
+						<img src="{% static "media/videostream.png" %}" class="d-block w-100" alt="Нет видеопотоков">
 					</div>
 				`;
 			}
@@ -639,7 +638,7 @@
 							<span id="span_more" class="badge set-cursor settings-button more-button mb-1 mx-1">»</span>
 						</div>
 						<div class="more-settings p-2">
-							<!--<img src={% static "videostream.png" %} width="150px">-->
+							<!--<img src={% static "media/videostream.png" %} width="150px">-->
 							<div id="carousel_${entityId}" class="carousel slide" style="padding-bottom: 20px;" data-bs-ride="carousel" data-bs-interval="false">								  	
 								<div class="carousel-inner">
 									${streamLinksContent}
@@ -1110,14 +1109,12 @@
 			if(streamList.width()<stopResize){
 				$('#objectstreamlist h3').css({'font-size':streamList.width()/100*7});
 				$('#objectstreamlist h5').css({'font-size':streamList.width()/100*5});
-				$('.stream-close').css({'padding-block':streamList.width()/100*1 +'px'});
-				$('.stream-close').css({'padding-inline':streamList.width()/100*2 +'px'});
+				$('.stream-close').css({'padding':streamList.width()/100*1 +'px'});
 			}
 			else{
 				$('#objectstreamlist h3').css({'font-size':stopResize/100*7});
 				$('#objectstreamlist h5').css({'font-size':stopResize/100*5});
-				$('.stream-close').css({'padding-block':'5px'});
-				$('.stream-close').css({'padding-inline':'10px'});
+				$('.stream-close').css({'padding':'6px'});
 			}
 		});
 
@@ -1150,7 +1147,7 @@
 			}
 		};
 
-		window.onunload = function(evt) {
+		/*window.onunload = function(evt) {
 			var analyticsData = new FormData();
 			analyticsData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 			analyticsData.append('settings', JSON.stringify(settings));
@@ -1166,7 +1163,7 @@
 				})
 			);
 			navigator.sendBeacon('{% url "set_settings" %}', analyticsData);
-		};
+		};*/
 
 		function saveUserSettings(reset=false){
 			$.ajax({
@@ -1218,70 +1215,50 @@
     </script>
 	
 	<script>
+		// Получаем новые данные с сервера каждые N миллисекунд
 		setInterval(function(){
-			/*$.ajax({
-				url: '{% url "get_coor" %}',
+			$.ajax({
+				url: '{% url "get_new_data" %}',
 				method: 'post',
 				dataType:'json',
+				async:false,
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 				},     
 				success: function(data){ 
-					for(var key in data){
-						iconMap.get(key).set('geometry', new ol.geom.Point([data[key]['position_e'], data[key]['position_n']]));
+					for(var e of data['entity_list']){
+						en_id = e['entity_id']
+						p_e = e['position_e'].replace(',','.');
+						p_n = e['position_n'].replace(',','.');
+						params = e['params']
+						try{
+							if(entityMap.getIdList.indexOf(en_id) >= 0){
+								for(var p of params){
+									pop = entityMap.getPopupById(en_id).getElement();
+									$(pop).find(`#p_sw_${p['params_id']}_${en_id}`).html(`
+										${p['params_alias']}: ${p['params_value']}
+									`);
+								}
+							}
+						}
+						catch{}
+						try{
+							if(p_e != undefined || p_n != undefined ){
+								entityMap.getIconFeatureById(en_id).set('geometry', new ol.geom.Point([p_e, p_n]));
+								var coor = entityMap.getIconFeatureById(en_id).getGeometry().getCoordinates();
+								entityMap.getPopupById(en_id).setPosition(coor);
+							}
+						}
+						catch{}
 					}
 				}
-			});*/
-			
-			for(var i = 1; i < 6; i++){
-				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
-				var px = parseFloat(coordinates[0])+5.0;
-				var py = parseFloat(coordinates[1])+2.0;
-				
-				entityMap.getIconFeatureById(`auto${i.toString()}`).setGeometry(new ol.geom.Point([px,py]));
-				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
-			}
-			/*for(var i = 5; i < 9; i++){
-				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
-				var px = parseFloat(coordinates[0])-1.0;
-				var py = parseFloat(coordinates[1])+6.0;
-				
-				entityMap.getIconFeatureById(`auto${i.toString()}`).setGeometry(new ol.geom.Point([px,py]));
-				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
-			}
-			for(var i = 9; i < 13; i++){
-				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
-				var px = parseFloat(coordinates[0])-3.0;
-				var py = parseFloat(coordinates[1])-7.0;
-				
-				entityMap.getIconFeatureById(`auto${i.toString()}`).setGeometry(new ol.geom.Point([px,py]));
-				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
-			}
-			for(var i = 13; i < 16; i++){
-				var coordinates = entityMap.getIconFeatureById(`auto${i.toString()}`).getGeometry().getCoordinates();
-				var px = parseFloat(coordinates[0])+3.0;
-				var py = parseFloat(coordinates[1])-1.0;
-				
-				entityMap.getIconFeatureById(`auto${i.toString()}`).setGeometry(new ol.geom.Point([px,py]));
-				entityMap.getPopupById(`auto${i.toString()}`).setPosition(coordinates);
-			}*/
-		},100);
+			});
+		},2000);
 
-		/*setInterval(function(){
-			minS = Math.ceil(25);
-			maxS = Math.floor(60);
-			minR = Math.ceil(1200);
-			maxR = Math.floor(2500);
-			for(var i = 1; i < 16; i++){
-				pop = entityMap.getPopupById(`auto${i.toString()}`).getElement();
-				$(pop).find(`#p_sw_Скорость_auto${i.toString()}`).html(`
-					Скорость: ${Math.floor(Math.random() * (maxS - minS)) + minS}км/ч
-				`);
-				$(pop).find(`#p_sw_Обороты_auto${i.toString()}`).html(`
-					Обороты: ${Math.floor(Math.random() * (maxR - minR)) + minR}
-				`);
-			}
-		},1000);*/
+		// Cохраняем настройки каждые N миллисекунд
+		setInterval(function(){
+			saveUserSettings();
+		},30000);
 
 	</script>
 {% endblock %}
