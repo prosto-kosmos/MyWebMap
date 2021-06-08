@@ -173,7 +173,6 @@
 #containerlist {
   overflow-y: scroll !important;
   overflow-x: hidden !important;
-  direction: rtl;
 }
 
 .dropdown-menu.show{
