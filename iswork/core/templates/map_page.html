@@ -56,7 +56,7 @@
 						{% for entity in objects.entity_list %}
 							<a href="#" id="{{entity.entity_id}}" class="list-group-item list-group-item-action">
 								<div class="d-flex w-100 justify-content-between">
-									<div id="{{entity.entity_id}}" class="show" title="Указатель на {{entity.model}}">
+									<div id="{{entity.entity_id}}" class="show-item" title="Указатель на {{entity.model}}">
 										<h5 class="mb-1 model">{{entity.model}}</h5>
 										<p class="mb-1 number">Номер: <i>{{entity.number}}</i></p>
 									</div>
@@ -89,7 +89,7 @@
 														</div>
 														<div class="col-2 gsettings-col">
 															<div class="form-check form-switch">
-																<input id="{{entity.entity_id}}_{{stream.stream_id}}" class="form-check-input" type="checkbox">
+																<input id="{{entity.entity_id}}_{{stream.stream_id}}" class="form-check-input view-stream" type="checkbox">
 															</div>
 														</div>
 													</div>
@@ -257,7 +257,10 @@
 
 
     <script>
-		$('#all_show_param').click();
+		$('#all_show_param').prop( "checked", false);
+		$('#all_show').prop( "checked", false);
+		$('.view-object').prop( "checked", true);
+		$('.view-stream').prop( "checked", false);
 
 		// Функционал подгона высоты родительского div
 		$('#fullscreen').css({'height':`${document.documentElement.clientHeight-70}px`});
@@ -295,7 +298,7 @@
 		var streamPanelEl = document.getElementById('streampanel');
 		var splitter = $('#widget').split({
 			orientation: 'vertical',
-			limit: 150,
+			limit: {leftUpper: 150, rightBottom: 10},
 			position: $('#widget').width() - 150, 
 			onDrag: function(event) {
 				map.updateSize();
@@ -409,6 +412,51 @@
 			BtnShowSidePanel.prototype.constructor = BtnShowSidePanel;
 			return BtnShowSidePanel;
 		}(ol.control.Control));
+
+		// Добавление кнопки скрытия панели со списком видеопотоков
+		{% comment %} var BtnShowSidePanelStream = /*@__PURE__*/(function (Control) {
+			function BtnShowSidePanelStream(opt_options) {
+				var options = opt_options || {};
+			
+				var btn_sidepanel_vs = document.createElement('button');
+				btn_sidepanel_vs.innerHTML = '»'; // Alt + 0171 и Alt + 0187
+
+				var element_sidepanel_vs = document.createElement('div');
+				element_sidepanel_vs.className = 'btn-sidepanel-vs-show ol-unselectable ol-control';
+				element_sidepanel_vs.appendChild(btn_sidepanel_vs);
+				element_sidepanel_vs.title = 'Hide videostreams';
+
+				ol.control.Control.call(this, {
+					element: element_sidepanel_vs,
+					target: options.target,
+				});
+					
+				btn_sidepanel_vs.addEventListener('click', function(){
+					if (this.innerHTML == '»'){
+						$('.vsplitter').css({'display':'none'});
+						$('.streampanel').css({'display':'none'});
+						$('.map').css({'width':'100%'});
+						map.updateSize();
+						this.innerHTML = '«';
+						element_sidepanel_vs.title = 'Show videostreams';
+					} 
+					else {
+						$('.vsplitter').css({'display':''});
+						$('.streampanel').css({'display':''});
+						var border = $('.map').width() - $('.streampanel').width() - $('.vsplitter').width();
+						$('.map').css({'width': border + 'px'});
+						map.updateSize();
+						this.innerHTML = '»';
+						element_sidepanel_vs.title = 'Hide videostreams';
+					}
+				}, false);
+			}
+
+			if (Control) BtnShowSidePanelStream.__proto__ = ol.control.Control;
+			BtnShowSidePanelStream.prototype = Object.create( ol.control.Control && ol.control.Control.prototype );
+			BtnShowSidePanelStream.prototype.constructor = BtnShowSidePanelStream;
+			return BtnShowSidePanelStream;
+		}(ol.control.Control));{% endcomment %}
 
 		// Добавление кнопки сохранения настроек
 		var BtnSaveSettings = /*@__PURE__*/(function (Control) {
@@ -554,6 +602,7 @@
 			
 			$(element).popover('dispose');
 			popup.setPosition(coordinates);
+			settings[entityId]['shown_preview'] = false;
 			
 			var flagSetListener = false; // флаг нужен чтобы избежать создание лишних обработчиков
 			var params = entityMap.get(entityId).getParams; // array параметров entity
@@ -705,11 +754,6 @@
 					$('.params-lines').css({'font-size': rng1.value +'px'});
 					$('.carousel-inner').css({'width': rng2.value +'px'});
 					$('.popover').css({'opacity': rng3.value});
-
-					// Обработка закрытия окна
-					/*$(element).find('#span_close').on('click', function(e) {
-						$(element).popover('dispose');
-					});*/
 
 					// Обработка нажатия на кнопку "Видео" - подробный видеопоток от Entity
 					$(element).find('#span_video').on('click', function(e) {
@@ -969,7 +1013,7 @@
 		}
 
 		// Обработка событий фокуса и показа/скрытия указателей Entity
-		var view_button_show = document.querySelectorAll(".show");
+		var view_button_show = document.querySelectorAll(".show-item");
 		var view_switch = document.querySelectorAll(".view-object");
 		for (var i = 0; i < view_button_show.length; i++) {
 			view_button_show[i].addEventListener("click", function () {
@@ -1112,6 +1156,7 @@
 
 		var streamList = $('#objectstreamlist');
 		var stopResize = 220; //px
+		var showStreams = 105; //px
 		var sensor = new ResizeSensor(streamList, function(){
 			if(streamList.width()<stopResize){
 				$('#objectstreamlist h3').css({'font-size':streamList.width()/100*7});
@@ -1122,6 +1167,14 @@
 				$('#objectstreamlist h3').css({'font-size':stopResize/100*7});
 				$('#objectstreamlist h5').css({'font-size':stopResize/100*5});
 				$('.stream-close').css({'padding':'6px'});
+			}
+			if(streamList.width()<showStreams){
+				$('.streampanel ').css({'background-color':'#ede'});
+				$('#liststream').css({'display':'none'});
+			}
+			else{
+				$('#liststream').css({'display':''});
+				$('.streampanel ').css({'background-color':'#eee'});
 			}
 		});
 
@@ -1177,7 +1230,7 @@
 				url: '{% url "set_settings" %}',
 				method: 'post',
 				dataType:'json',
-				async:true,
+				async:false,
 				data: {
 					csrfmiddlewaretoken: '{{ csrf_token }}',
 					settings:JSON.stringify(settings),
