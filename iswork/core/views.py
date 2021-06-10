@@ -58,6 +58,8 @@ class MapView(LoginRequiredMixin, View):
         settings_size_text =  user_data.settings_size_text
         settings_size_preview = user_data.settings_size_preview
         settings_opacity_windows = user_data.settings_opacity_windows
+        show_sidepanel = user_data.show_sidepanel
+        position_sidepanel_vs = user_data.position_sidepanel_vs
         context = {
             'zoom': zoom,
             'position_e': e,
@@ -65,6 +67,8 @@ class MapView(LoginRequiredMixin, View):
             'settings_size_text': settings_size_text,
             'settings_size_preview': settings_size_preview,
             'settings_opacity_windows': settings_opacity_windows,
+            'show_sidepanel': show_sidepanel,
+            'position_sidepanel_vs': position_sidepanel_vs,
             'objects': getStartObjests(),
         }
         template = 'map_page.html'
@@ -111,13 +115,16 @@ class SaveUserSettingsView(View):
                 user_data.settings_size_preview = global_settings['s_size_preview']
                 user_data.settings_opacity_windows = global_settings['s_opacity_windows']
 
+                user_data.show_sidepanel = global_settings['show_sp']
+                user_data.position_sidepanel_vs = global_settings['position_sp_vs']
+
                 user_data.save()
             else:
                 all_settings = Settings.objects.filter(user = request.user)
                 all_settings.delete()
             return HttpResponse(True)
-        except:
-            print('Error SaveUserSettingsView')
+        except Exception as errSave:
+            print(errSave)
             return HttpResponse(False)
 
 
