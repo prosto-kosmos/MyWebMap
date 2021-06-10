@@ -295,11 +295,13 @@
 			$("#liststream").disableSelection();
 		});
 
-		var streamPanelEl = document.getElementById('streampanel');
+		var show_sidepanel = ('{{show_sidepanel}}' === 'True');
+		var position_sidepanel_vs = '{{position_sidepanel_vs}}';
+
 		var splitter = $('#widget').split({
 			orientation: 'vertical',
 			limit: {leftUpper: 150, rightBottom: 10},
-			position: $('#widget').width() - 150, 
+			position: 150, 
 			onDrag: function(event) {
 				map.updateSize();
 			}
@@ -377,6 +379,7 @@
 			
 				var btn_sidepanel = document.createElement('button');
 				btn_sidepanel.innerHTML = '«'; // Alt + 0171 и Alt + 0187
+				btn_sidepanel.id = 'btn_hide_sidepanel';
 
 				var element_sidepanel = document.createElement('div');
 				element_sidepanel.className = 'btn-sidepanel-show ol-unselectable ol-control';
@@ -395,14 +398,15 @@
 						map.updateSize();
 						this.innerHTML = '»';
 						element_sidepanel.title = 'Show sidepanel';
+						show_sidepanel = false;
 					} 
 					else {
-						//document.getElementById('widget').style.marginLeft = "300px";
 						document.getElementById('sidepanel').hidden = false;
 						splitter.refresh();
 						map.updateSize();
 						this.innerHTML = '«';
 						element_sidepanel.title = 'Hide sidepanel';
+						show_sidepanel = true;
 					}
 				}, false);
 			}
@@ -1176,6 +1180,7 @@
 				$('#liststream').css({'display':''});
 				$('.streampanel ').css({'background-color':'#eee'});
 			}
+			position_sidepanel_vs = $('.streampanel').width() + $('.vsplitter').width()/2;
 		});
 
 		window.onload = function() {
@@ -1205,6 +1210,14 @@
 					}
 				}
 			}
+
+			// Cкрытие (показ) боковой панели
+			if(!show_sidepanel){
+				$('#btn_hide_sidepanel').click();
+			}
+
+			// Установка положения разделителя
+			splitter.position($('#widget').width() - position_sidepanel_vs)
 		};
 
 		/*window.onunload = function(evt) {
@@ -1242,6 +1255,8 @@
 						s_size_text: parseFloat(settings_size_text),
 						s_size_preview: parseFloat(settings_size_preview),
 						s_opacity_windows: parseFloat(settings_opacity_windows),
+						show_sp: show_sidepanel,
+            			position_sp_vs: position_sidepanel_vs,
 					}),
 				},     
 				success: function(data){ 

@@ -10,6 +10,9 @@ class Data(models.Model):
     settings_size_text = models.IntegerField(verbose_name='Масштаб текста списка датчиков', default=12)
     settings_size_preview = models.IntegerField(verbose_name='Масштаб превью видеопотока', default=150)
     settings_opacity_windows = models.FloatField(verbose_name='Прозрачность окон указателей', default=1.0)
+    show_sidepanel = models.BooleanField(verbose_name='Отображение боковой панели с объектами', default=True)
+    position_sidepanel_vs = models.IntegerField(verbose_name='Положение сплиттера боковой панели с видеопотоками ', default=150)
+
     
     def __str__(self):
         return f'Данные пользователя {self.user.username} ({self.position_e}, {self.position_n})'
