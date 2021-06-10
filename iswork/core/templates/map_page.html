@@ -298,10 +298,14 @@
 		var show_sidepanel = ('{{show_sidepanel}}' === 'True');
 		var position_sidepanel_vs = '{{position_sidepanel_vs}}';
 
+		var posSplitter = $('#widget').width() - parseInt(position_sidepanel_vs);
+		if(!show_sidepanel){
+			posSplitter += 300;
+		}
 		var splitter = $('#widget').split({
 			orientation: 'vertical',
 			limit: {leftUpper: 150, rightBottom: 10},
-			position: 150, 
+			position: posSplitter, 
 			onDrag: function(event) {
 				map.updateSize();
 			}
@@ -1215,9 +1219,6 @@
 			if(!show_sidepanel){
 				$('#btn_hide_sidepanel').click();
 			}
-
-			// Установка положения разделителя
-			splitter.position($('#widget').width() - position_sidepanel_vs)
 		};
 
 		/*window.onunload = function(evt) {
