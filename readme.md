@@ -1,10 +1,3 @@
-# Django user registration and authorization template
+# MyWebMap Application
 
-## Command for create application
-
-    pip install -r requirements.txt
-    django-admin startproject iswork
-    python manage.py startapp core
-    python manage.py migrate
-    python manage.py createsuperuser
-    
+Приложение предназначено для мониторинга событий и отображения их на карте    
